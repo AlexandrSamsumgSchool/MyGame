@@ -1,6 +1,5 @@
 package com.example.mygame;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
@@ -21,7 +20,5 @@ public class Circle extends GameObject {
     }
 
     @Override
-    public void update() {
-
-    }
+    public void update(){}
 }

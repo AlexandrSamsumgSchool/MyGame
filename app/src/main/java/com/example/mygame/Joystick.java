@@ -90,21 +90,4 @@ public class Joystick {
     public double getActuatorY() {
         return actuatorY;
     }
-    private static boolean compare(int a,int b){
-        boolean ans =false;
-        for(int i=0;i<60;i++){
-            if(a+i ==b)ans =  true;
-            if(a-i==b)ans =  true;
-        }
-        return ans;
-    }
-    public  String getDirection(){
-        String Direction = "DOWN";
-        if( compare(innerCircleCenterPositionX , outerCircleCenterPositionX) && innerCircleCenterPositionY<outerCircleCenterPositionY)Direction = "UP";
-        if( compare(innerCircleCenterPositionX ,outerCircleCenterPositionX )&& innerCircleCenterPositionY>outerCircleCenterPositionY)Direction = "DOWN";
-        if( compare(innerCircleCenterPositionY ,outerCircleCenterPositionY) &&innerCircleCenterPositionX>outerCircleCenterPositionX)Direction = "RIGHT";
-        if( compare(innerCircleCenterPositionY , outerCircleCenterPositionY) &&innerCircleCenterPositionX<outerCircleCenterPositionX)Direction = "LEFT";
-
-        return Direction;
-    }
 }

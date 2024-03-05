@@ -3,15 +3,10 @@ package com.example.mygame;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.view.Surface;
 import android.view.SurfaceHolder;
-
-import java.util.zip.Adler32;
-
 public class GameLoop extends Thread{
     private boolean isRunning = false;
-    public static final double MAX_UPS = 60.0;
-    private SurfaceHolder surfaceHolder;
+    private  SurfaceHolder surfaceHolder;
     private Game game;
     private double averageFPS;
 
@@ -29,6 +24,10 @@ public class GameLoop extends Thread{
         start();
     }
 
+    public GameLoop() {
+
+    }
+
     @Override
     public void run() {
 
@@ -38,8 +37,6 @@ public class GameLoop extends Thread{
         long elapsedTime;
         Canvas canvas =null;
         startTime = System.currentTimeMillis();
-
-
 
         while(isRunning){
             try {
@@ -70,6 +67,14 @@ public class GameLoop extends Thread{
                     startTime =System.currentTimeMillis();
 
             }
+        }
+    }
+    public void stopLoop() {
+        isRunning = false;
+        try {
+            join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

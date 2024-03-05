@@ -1,26 +1,15 @@
 package com.example.mygame;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
+import android.util.DisplayMetrics;
 
 import androidx.core.content.ContextCompat;
 
 public class Player extends Circle  {
-    private static final double SPEED_PIXELS_PER_SECOND = 800.0;
-    private int EatenFood = 0;
-    private static final double MAX_SPEED = SPEED_PIXELS_PER_SECOND/ GameLoop.MAX_UPS;
-   private Joystick joystick;
-   Points points = new Points();
-
-    public void setEatenFood(int eatenFood) {
-        EatenFood = eatenFood;
-    }
-
-    public int getEatenFood() {
-        return EatenFood;
-    }
-
+    public float EatenFood = 0;
+    public static  double MAX_SPEED = 10;
+    public double mass = 2;
+    private Joystick joystick;
 
     public Player(Context context, Joystick joystick, double positionX, double positionY, double radius) {
         super( ContextCompat.getColor(context, R.color.player), positionX, positionY, radius);
@@ -32,5 +21,13 @@ public class Player extends Circle  {
         velocityY = joystick.getActuatorY() * MAX_SPEED;
         positionX += velocityX;
         positionY += velocityY;
+        if(EatenFood>75 && radius>100 ){radius=radius-0.0625;EatenFood-=0.0225;}
+        MAX_SPEED = 120/(Math.sqrt(radius));
+        }
+        public boolean CalculateScale(int widthPixels,int heightPixels){
 
-    }}
+            return (widthPixels/4<=radius || heightPixels/4<=radius);
+
+        }
+
+    }

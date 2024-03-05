@@ -2,43 +2,52 @@ package com.example.mygame;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.WindowManager;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private final Player player;
     Points points;
-    private float[] FoodX;
-    private float[] FoodY;
+   Map map;
+    private final float[] FoodX;
+    private final float[] FoodY;
+    int Rr = 100;//radius food
     DisplayMetrics displayMetrics;
     private final Joystick joystick;
     private GameLoop gameLoop;
-    private GameDisplay camera ;
+    private final GameDisplay camera ;
+    Bot bot;
     public Game(Context context) {
             super(context);
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
         gameLoop = new GameLoop(this,surfaceHolder);
-            joystick = new Joystick(275,800,150,70);
-            player = new Player(getContext(),joystick,1000,500,100);
-         displayMetrics = new DisplayMetrics();
+
+        joystick = new Joystick(275,800,200,100);
+
+        player = new Player(getContext(),joystick,1000,500,100);
+
+        displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
         camera = new GameDisplay(displayMetrics.widthPixels,displayMetrics.heightPixels,player);
+
         points = new Points();
-        FoodX = points.SpawnPointsX(500);
-        FoodY = points.SpawnPointsY(500);;
+        FoodX = points.SpawnPointsX();
+        FoodY = points.SpawnPointsY();
+
+        map = new Map(camera,player,displayMetrics.widthPixels,displayMetrics.heightPixels);
+
+        bot = new Bot(Color.RED,500,500,100);
 
     }
 
@@ -68,69 +77,74 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     @Override
-    public void surfaceCreated( SurfaceHolder holder) {
+    public void surfaceCreated(@NonNull SurfaceHolder holder) {
+        if(gameLoop.getState().equals(Thread.State.TERMINATED)){
+            SurfaceHolder surfaceHolder = getHolder();
+            surfaceHolder.addCallback(this);
+            gameLoop = new GameLoop(this,surfaceHolder);
+        }
     gameLoop.startLoop();
 
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+    public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
 
     }
 
     @Override
-    public void surfaceDestroyed( SurfaceHolder holder) {
+    public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
 
     }
 
     @Override
     public void draw(Canvas canvas) {
-        super.draw(canvas);
-        canvas.drawARGB(255, 255, 255, 255);
-       drawFPS(canvas);
-        player.draw(canvas,camera);
-        joystick.draw(canvas);
+         super.draw(canvas);
+         canvas.drawARGB(255, 255, 255, 255);
+         map.drawMap(canvas);
+         drawFPS_Eaten_FOOD(canvas);
+         player.draw(canvas,camera);
+         joystick.draw(canvas);
          drawFood(canvas);
+         bot.draw(canvas,camera);
     }
 
     public void drawFood(Canvas canvas) {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLUE);
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < points.MAX_POINTS_FOOD; i++) {
             if (points.CalculateFood((int) player.getPositionX(), (int) player.getPositionY(), (int) FoodX[i], (int) FoodY[i], (int) player.radius)) {
                 FoodX[i] = (int) (Math.random() * 10000);
                 FoodY[i] = (int) (Math.random() * 10000);
-                player.setEatenFood(player.getEatenFood()+1);
+                player.radius +=player.mass;
+                player.EatenFood+=1;
             }
+            if(player.CalculateScale(displayMetrics.widthPixels, displayMetrics.heightPixels) && map.Cagesize > 25)
+            {player.radius = player.radius/1.25;points.radiusFood/=1.5;Rr/=1.5;map.Cagesize/=1.5;Player.MAX_SPEED/=1.25;}
             canvas.drawCircle((float) camera.gameTOdisplaycoordinateX(FoodX[i]), (float) camera.gameTOdisplaycoordinateY(FoodY[i]), points.getRadiusFood(), paint);
         }
 
     }
-    public void drawFPS (Canvas canvas){
+    public void drawFPS_Eaten_FOOD (Canvas canvas){
 
-        String averageFPS = Double.toString(gameLoop.getAverageFPS());
+        String averageFPS = Integer.toString((int)gameLoop.getAverageFPS());
         Paint paint = new Paint();
         int color = ContextCompat.getColor(getContext(),R.color.magenta);
         paint.setColor(color);
         paint.setTextSize(50);
-        canvas.drawCircle((float) camera.gameTOdisplaycoordinateX(0),(float)camera.gameTOdisplaycoordinateY(0),100,paint);
-        canvas.drawText("FPS : "+averageFPS,100,200,paint);
+        canvas.drawText("FPS = "+averageFPS,100,200,paint);
+        canvas.drawText("Size = "+(int)player.EatenFood,100,100,paint);
     }
     public void update() {
     camera.update();
     player.update();
     joystick.update();
-        for (int i = 0; i < points.getMAX_POINTS_FOOD(); i++) {
-            if (points.CalculateFood((int) player.positionX, (int) player.positionY, (int) FoodX[i], (int) FoodY[i], (int)player.radius)) {
-                player.setEatenFood(player.getEatenFood() + 1);
-                player.radius +=15;
-            }
-        }
-        if(displayMetrics.heightPixels<player.radius*3){player.radius = player.radius/2;points.setRadiusFood(points.getRadiusFood()/2);}
-
+    bot.update();
     }
 
 
-
+    public void pause() {
+        gameLoop.stopLoop();
+    }
 }
