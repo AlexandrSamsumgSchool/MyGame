@@ -9,7 +9,8 @@ public class Map {
     GameDisplay camera;
     int widthPixels,heightPixels;
     DisplayMetrics displayMetrics;
-    public float Cagesize = 200;
+    private int CageX = 0 , CageY = 0;
+    public float Cagesize = 400;
     Player player;
     public Map(GameDisplay camera,Player player,int widthPixels,int heightPixels) {
         this.camera = camera;
@@ -27,16 +28,25 @@ public class Map {
             for (int i = 0; i <= 10000; i+=Cagesize) {
                 w += Cagesize;
                 canvas.drawLine((float) camera.gameTOdisplaycoordinateX(w),
-                        (float) camera.gameTOdisplaycoordinateY(0), (float) camera.gameTOdisplaycoordinateX(w),
+                        (float) camera.gameTOdisplaycoordinateY(CageY), (float) camera.gameTOdisplaycoordinateX(w),
                         (float) camera.gameTOdisplaycoordinateY(10000), paint);
 
-                canvas.drawLine((float) camera.gameTOdisplaycoordinateX(0), (float) camera.gameTOdisplaycoordinateY(w),
+                canvas.drawLine((float) camera.gameTOdisplaycoordinateX(CageX), (float) camera.gameTOdisplaycoordinateY(w),
                         (float) camera.gameTOdisplaycoordinateX(10000),
                         (float) camera.gameTOdisplaycoordinateY(w), paint);
             }
+//        for(int i=0;i<widthPixels/Cagesize+2;i++){
+//            w+=Cagesize;
+//            canvas.drawLine(w, CageY, w, heightPixels, paint);
+//        }
+//        w=0;
+//        for(int i=0;i<heightPixels/Cagesize+2;i++){
+//            w+=Cagesize;
+//            canvas.drawLine(CageX,w, widthPixels,w, paint);
+//        }
 
     }
     public  void update(){
-        if((widthPixels/4<=player.radius || heightPixels/4<=player.radius))Cagesize/=2;
+        if((widthPixels/4<=player.radius || heightPixels/4<=player.radius ))Cagesize/=2;
     }
 }

@@ -13,25 +13,32 @@
         android:theme="@style/Theme.MyGame"
         tools:targetApi="31">
         <activity
+            android:name=".Options"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            />
+        <activity
+            android:name=".Menu"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            />
+        <activity
             android:name=".SplashScreen"
             android:exported="true"
-            android:theme="@style/SplathTheme"
             android:screenOrientation="landscape"
-            >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:theme="@style/SplathTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-            >
-
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
     </application>
 
 </manifest>

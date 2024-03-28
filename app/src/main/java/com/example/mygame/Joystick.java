@@ -1,7 +1,5 @@
 package com.example.mygame;
-
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 
 public class Joystick {
@@ -17,9 +15,7 @@ public class Joystick {
     private boolean isPressed;
     private double actuatorX;
     private double actuatorY;
-
-
-    public Joystick(int CenterPositionX, int CenterPositionY,int outerCircleRadius,int innerCircleRadius) {
+    public Joystick(int CenterPositionX, int CenterPositionY, int outerCircleRadius, int innerCircleRadius,int innerCircleColor,int outerCircleColor) {
         outerCircleCenterPositionX = CenterPositionX;
         outerCircleCenterPositionY = CenterPositionY;
         innerCircleCenterPositionX = CenterPositionX;
@@ -30,16 +26,18 @@ public class Joystick {
         this.innerCircleRadius = innerCircleRadius;
 
         outerCirclePaint = new Paint();
-        outerCirclePaint.setColor(Color.GRAY);
+        outerCirclePaint.setColor(outerCircleColor);
         outerCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
         innerCirclePaint =new Paint();
-        innerCirclePaint.setColor(Color.BLUE);
+        innerCirclePaint.setColor(innerCircleColor);
         innerCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
+
     }
 
     public void draw(Canvas canvas) {
         canvas.drawCircle(outerCircleCenterPositionX,outerCircleCenterPositionY,outerCircleRadius,outerCirclePaint);
+
         canvas.drawCircle(innerCircleCenterPositionX,innerCircleCenterPositionY,innerCircleRadius,innerCirclePaint);
     }
 
@@ -65,7 +63,7 @@ public class Joystick {
     }
 
     public void setActuator(double touchPositionX, double touchPositionY) {
-        double deltaX =touchPositionX - outerCircleCenterPositionX;
+        double deltaX = touchPositionX - outerCircleCenterPositionX;
         double deltaY = touchPositionY- outerCircleCenterPositionY;
         double deltadistance = Math.sqrt(Math.pow(deltaX,2)+Math.pow(deltaY,2));
         if(deltadistance<outerCircleRadius){

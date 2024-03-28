@@ -4,15 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.SurfaceHolder;
 
 public class SplashScreen extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent i = new Intent(SplashScreen.this,MainActivity.class);
-
+        Intent i = new Intent(SplashScreen.this,Menu.class);
         startActivity(i);
         finish();
+
     }
 }

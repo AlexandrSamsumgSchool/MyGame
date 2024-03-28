@@ -1,15 +1,13 @@
 package com.example.mygame;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.view.SurfaceHolder;
 public class GameLoop extends Thread{
     private boolean isRunning = false;
     private  SurfaceHolder surfaceHolder;
     private Game game;
     private double averageFPS;
-
+    public  long startTime;
     public GameLoop(Game game, SurfaceHolder surfaceHolder) {
         this.surfaceHolder = surfaceHolder;
         this.game = game;
@@ -23,28 +21,21 @@ public class GameLoop extends Thread{
         isRunning = true;
         start();
     }
-
-    public GameLoop() {
-
-    }
-
     @Override
     public void run() {
-
+        Canvas canvas = null;
         super.run();
         int frameCount =0;
-        long startTime;
         long elapsedTime;
-        Canvas canvas =null;
         startTime = System.currentTimeMillis();
-
         while(isRunning){
+
             try {
                 canvas = surfaceHolder.lockCanvas();
+
                 synchronized (surfaceHolder) {
                     game.update();
                     game.draw(canvas);
-
                 }
             }
             catch (IllegalArgumentException e){

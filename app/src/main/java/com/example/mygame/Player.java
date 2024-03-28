@@ -1,15 +1,17 @@
 package com.example.mygame;
 
 import android.content.Context;
-import android.util.DisplayMetrics;
+import android.graphics.Color;
+import android.widget.Button;
 
 import androidx.core.content.ContextCompat;
 
 public class Player extends Circle  {
     public float EatenFood = 0;
     public static  double MAX_SPEED = 10;
-    public double mass = 2;
+    public double mass;
     private Joystick joystick;
+
 
     public Player(Context context, Joystick joystick, double positionX, double positionY, double radius) {
         super( ContextCompat.getColor(context, R.color.player), positionX, positionY, radius);
@@ -21,13 +23,13 @@ public class Player extends Circle  {
         velocityY = joystick.getActuatorY() * MAX_SPEED;
         positionX += velocityX;
         positionY += velocityY;
-        if(EatenFood>75 && radius>100 ){radius=radius-0.0625;EatenFood-=0.0225;}
+        if(EatenFood>75 && radius>100 ){radius=radius-0.0325;EatenFood-=0.0325;}
         MAX_SPEED = 120/(Math.sqrt(radius));
-        }
-        public boolean CalculateScale(int widthPixels,int heightPixels){
-
-            return (widthPixels/4<=radius || heightPixels/4<=radius);
-
+        mass = 1/(Math.sqrt(radius))+1;
+        Collision();
         }
 
+    public  boolean Can_SEE_FOOD(int pX,int pY,int wp,int hp){
+        return (positionX+wp>pX && positionX-wp<pX && positionY+hp>pY && positionY-hp<pY);
+    }
     }

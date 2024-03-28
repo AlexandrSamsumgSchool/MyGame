@@ -11,6 +11,10 @@ public abstract class GameObject {
         this.positionY = positionY;
     }
 
+    public GameObject() {
+
+    }
+
     public double getPositionX() { return positionX; }
     public double getPositionY() { return positionY; }
 

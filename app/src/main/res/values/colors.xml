@@ -2,6 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="magenta">#FF0900</color>
+    <color name="magenta">#EA4B45</color>
     <color name="player">#2196F3</color>
+    <color name="outer">#E29E39</color>
+    <color name="inner">#0027FF</color>
 </resources>
