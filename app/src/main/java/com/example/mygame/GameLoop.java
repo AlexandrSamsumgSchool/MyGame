@@ -4,8 +4,8 @@ import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 public class GameLoop extends Thread{
     private boolean isRunning = false;
-    private  SurfaceHolder surfaceHolder;
-    private Game game;
+    private final SurfaceHolder surfaceHolder;
+    private final Game game;
     private double averageFPS;
     public  long startTime;
     public GameLoop(Game game, SurfaceHolder surfaceHolder) {

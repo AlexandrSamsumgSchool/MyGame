@@ -1,8 +1,8 @@
 package com.example.mygame;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,8 +12,6 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-
 import androidx.annotation.NonNull;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
@@ -21,16 +19,18 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private final MediaPlayer mediaPlayer1,mediaPlayer2 ;
     private final Points points;
     private final Map map;
-    private  Bot[] bots;
+    private final Bot[] bots;
     private final DisplayMetrics displayMetrics;
     private final Joystick joystick;
     private  GameLoop gameLoop;
     private final GameDisplay camera ;
     private final Bot bot;
-    private int innerCircleColor,outerCircleColor;
+    private final int innerCircleColor,outerCircleColor;
     private final Resources resources = getResources();
+    String name ;
+    private int Textsize = 60,textX = 14,textY = 5;
 
-    public Game(Context context) {
+    public Game(Context context,String name,boolean rp) {
             super(context);
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
@@ -38,12 +38,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
          gameLoop = new GameLoop(this,surfaceHolder);
         displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-        // создаем джойстик
+        if(name.isEmpty())this.name = "Player";
+        else this.name = name;
+        // создаем джойстик,учитывая расположение (справа или слева)
 
         innerCircleColor = resources.getColor(R.color.magenta);
         outerCircleColor = resources.getColor(R.color.outer);
-        joystick = new Joystick(275,displayMetrics.heightPixels-300/*800*/,displayMetrics.heightPixels/5,displayMetrics.heightPixels/12,innerCircleColor,outerCircleColor);
+        if(rp)joystick = new Joystick(displayMetrics.widthPixels-300,displayMetrics.heightPixels-300/*800*/,displayMetrics.heightPixels/5,displayMetrics.heightPixels/12,innerCircleColor,outerCircleColor);
+        else joystick = new Joystick(275,displayMetrics.heightPixels-300/*800*/,displayMetrics.heightPixels/5,displayMetrics.heightPixels/12,innerCircleColor,outerCircleColor);
 
 // создаем игрока и камеру
         player = new Player(getContext(),joystick,Math.random()*8000,Math.random()*8000,100);
@@ -123,10 +125,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
          joystick.draw(canvas);
          drawFood(canvas,camera,bots,mediaPlayer1,mediaPlayer2);
          for(Bot k:bots){
-             if(player.Can_SEE_FOOD((int) k.positionX, (int) k.positionY,displayMetrics.widthPixels,displayMetrics.heightPixels));
-             k.draw(canvas,camera,player,displayMetrics.widthPixels,displayMetrics.heightPixels);
+             if(player.Can_SEE_FOOD((int) k.positionX, (int) k.positionY,displayMetrics.widthPixels,displayMetrics.heightPixels))
+                 k.draw(canvas,camera,player,displayMetrics.widthPixels,displayMetrics.heightPixels);
          }
         player.draw(canvas,camera);
+        drawName(canvas);
     }
     public void drawFood(Canvas canvas, GameDisplay camera,Bot[] bots, MediaPlayer mediaPlayer,MediaPlayer mediaPlayer1) {
         Paint paint = new Paint();
@@ -142,24 +145,24 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                 player.EatenFood += 1;
             }
 //            bot food определяем ее координаты если сьели (телепортируем на новое место)
-            for (int j=0;j<bots.length;j++) {
-                if (points.Can_Eat((int) bots[j].getPositionX(), (int) bots[j].getPositionY(), (int) points.FoodX[i], (int) points.FoodY[i], (int) bots[j].radius)) {
+            for (Bot value : bots) {
+                if (points.Can_Eat((int) value.getPositionX(), (int) value.getPositionY(), (int) points.FoodX[i], (int) points.FoodY[i], (int) value.radius)) {
                     points.FoodX[i] = (int) (Math.random() * 10000);
                     points.FoodY[i] = (int) (Math.random() * 10000);
-                    bots[j].radius += 3;
-                    bots[j].EatenFood++;
+                    value.radius += 3;
+                    value.EatenFood++;
                 }
-                if(player.Can_EAT_PL((int) bots[j].positionX, (int)bots[j].positionY, (int) bots[j].radius)){
+                if (player.Can_EAT_PL((int) value.positionX, (int) value.positionY, (int) value.radius)) {
                     mediaPlayer1.start();
-                    bots[j].velocityY = 0;
-                    bots[j].velocityX = 0;
-                    player.radius = Math.sqrt(player.radius*player.radius+ bots[j].radius*bots[j].radius);
-                    bots[j].radius = 100;
-                    player.EatenFood+=bots[j].EatenFood;
-                    bots[j].EatenFood = 0;
-                    bots[j].positionX = Math.random()*10000;
-                    bots[j].positionX = Math.random()*10000;
-                  //  bot.remove(bots,j);
+                    value.velocityY = 0;
+                    value.velocityX = 0;
+                    player.radius = Math.sqrt(player.radius * player.radius + value.radius * value.radius);
+                    value.radius = 100;
+                    player.EatenFood += value.EatenFood;
+                    value.EatenFood = 0;
+                    value.positionX = Math.random() * 10000;
+                    value.positionX = Math.random() * 10000;
+                    //  bot.remove(bots,j);
                 }
 //                if(bots[j].Can_EAT_PL((int) player.positionX, (int) player.positionY, (int) player.radius)){
 //                    player.velocityY = 0;
@@ -172,7 +175,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             }
 //             масштаб
             if(player.CalculateScale(displayMetrics.widthPixels,displayMetrics.heightPixels) && map.Cagesize > 25)
-            {player.radius = player.radius/1.25;points.radiusFood/=1.25;map.Cagesize/=1.5;Player.MAX_SPEED/=1.25;
+            {   Textsize*=1.1;textX*=1.1;textY*= 1.1;
+                player.radius = player.radius/1.25;points.radiusFood/=1.25;map.Cagesize/=1.5;Player.MAX_SPEED/=1.25;
                 for(Bot k:bots){
                     k.radius/=1.5;
                 }
@@ -184,25 +188,29 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         }
 
     }
-    public void drawButton(Canvas canvas){
-        Paint paint = new Paint();
-        paint.setColor(Color.RED);
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        canvas.drawCircle(575,800,100,paint);
-    }
+//    public void drawButton(Canvas canvas){
+//        Paint paint = new Paint();
+//        paint.setColor(Color.RED);
+//        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+//        canvas.drawCircle(575,800,100,paint);
+//    }
 
 
 //рисуем  ФПС и размер еды
     public void drawFPS_SIZE (Canvas canvas){
-
-                    String averageFPS = Integer.toString((int) gameLoop.getAverageFPS());
+             //        String averageFPS = Integer.toString((int) gameLoop.getAverageFPS());
                     Paint paint = new Paint();
                     paint.setColor(Color.RED);
                     paint.setTextSize(50);
-                    canvas.drawText("FPS = " + averageFPS, 100, 200, paint);
-                    canvas.drawText("Size = " + (int) player.EatenFood, 100, 100, paint);
-
+                   // canvas.drawText("FPS = " + averageFPS, 100, 200, paint);
+                    canvas.drawText("Size = " + (int) player.EatenFood, 100, 100, paint);}
+    public void drawName(Canvas canvas){
+        Paint paint = new Paint();
+        paint.setColor(Color.RED);
+        paint.setTextSize(Textsize);
+        canvas.drawText(name, (float) camera.gameTOdisplaycoordinateX(player.positionX)-textX*name.length(), (float) camera.gameTOdisplaycoordinateY(player.positionY)+textY, paint);
     }
+
     //обновляем игроком карту и расположение камеры
     public void update() {
     camera.update();

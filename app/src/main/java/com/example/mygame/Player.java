@@ -1,16 +1,13 @@
 package com.example.mygame;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.widget.Button;
-
 import androidx.core.content.ContextCompat;
 
 public class Player extends Circle  {
     public float EatenFood = 0;
     public static  double MAX_SPEED = 10;
     public double mass;
-    private Joystick joystick;
+    private final Joystick joystick;
 
 
     public Player(Context context, Joystick joystick, double positionX, double positionY, double radius) {

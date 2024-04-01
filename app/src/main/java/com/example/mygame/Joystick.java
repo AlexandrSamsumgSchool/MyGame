@@ -3,14 +3,14 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 public class Joystick {
-    private Paint outerCirclePaint;
-    private Paint innerCirclePaint;
-    private int innerCircleRadius;
-    private int outerCircleRadius;
+    private final Paint outerCirclePaint;
+    private final Paint innerCirclePaint;
+    private final int innerCircleRadius;
+    private final int outerCircleRadius;
     private int innerCircleCenterPositionY;
     private int innerCircleCenterPositionX;
-    private int outerCircleCenterPositionX;
-    private int outerCircleCenterPositionY;
+    private final int outerCircleCenterPositionX;
+    private final int outerCircleCenterPositionY;
     private double joystickCenterToTouchDistance ;
     private boolean isPressed;
     private double actuatorX;
@@ -81,7 +81,16 @@ public class Joystick {
         actuatorY = 0.0;
         actuatorX = 0.0;
     }
-
+//    public int getDirectionX(){
+//
+//        return 0;
+//    }
+//    public int getLine(int x1,int y1,int x2,int y2){
+//        int a,b,c;
+//        a = y1-y2;
+//        b= x2-x1;
+//        c = x1*y2-x2*y1;
+//    }
     public double getActuatorX() {
         return actuatorX;
     }
