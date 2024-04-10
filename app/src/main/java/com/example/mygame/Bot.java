@@ -61,12 +61,12 @@ public class Bot extends Circle{
         return result;
     }
 
-    public void draw(Canvas canvas, GameDisplay gameDisplay, Player player, int wp, int hp) {
+    public void draw(Canvas canvas, Camera camera, Player player, int wp, int hp) {
         Paint paint = new Paint();
         paint.setColor(getColor());
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         if(player.Can_SEE_FOOD((int) positionX, (int) positionY,wp,hp))
-            canvas.drawCircle((float) gameDisplay.gameTOdisplaycoordinateX(positionX), (float) gameDisplay.gameTOdisplaycoordinateY(positionY), (float) radius,paint);
+            canvas.drawCircle((float) camera.gameTOdisplaycoordinateX(positionX), (float) camera.gameTOdisplaycoordinateY(positionY), (float) radius,paint);
     }
 
 }

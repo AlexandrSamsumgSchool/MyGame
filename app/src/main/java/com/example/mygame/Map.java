@@ -6,13 +6,13 @@ import android.graphics.Paint;
 import android.util.DisplayMetrics;
 
 public class Map {
-    GameDisplay camera;
+    Camera camera;
     int widthPixels,heightPixels;
     DisplayMetrics displayMetrics;
     private int CageX = 0 , CageY = 0;
-    public float Cagesize = 400;
+    public float Cagesize = 500;
     Player player;
-    public Map(GameDisplay camera,Player player,int widthPixels,int heightPixels) {
+    public Map(Camera camera, Player player, int widthPixels, int heightPixels) {
         this.camera = camera;
         this.player = player;
         displayMetrics = new DisplayMetrics();

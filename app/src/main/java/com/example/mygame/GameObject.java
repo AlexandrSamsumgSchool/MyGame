@@ -19,7 +19,7 @@ public abstract class GameObject {
     public double getPositionY() { return positionY; }
 
 
-    public abstract void draw(Canvas canvas, GameDisplay gameDisplay);
+    public abstract void draw(Canvas canvas, Camera camera);
     public abstract void update();
 
 }

@@ -1,8 +1,8 @@
 package com.example.mygame;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -23,7 +23,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private final DisplayMetrics displayMetrics;
     private final Joystick joystick;
     private  GameLoop gameLoop;
-    private final GameDisplay camera ;
+    private final Camera camera ;
     private final Bot bot;
     private final int innerCircleColor,outerCircleColor;
     private final Resources resources = getResources();
@@ -49,7 +49,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
 // создаем игрока и камеру
         player = new Player(getContext(),joystick,Math.random()*8000,Math.random()*8000,100);
-        camera = new GameDisplay(displayMetrics.widthPixels,displayMetrics.heightPixels,player);
+        camera = new Camera(displayMetrics.widthPixels,displayMetrics.heightPixels,player);
 // создаем еду
         points = new Points();
         points.SpawnPointsX();
@@ -121,17 +121,18 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
          super.draw(canvas);
          canvas.drawColor(Color.WHITE);
          map.drawMap(canvas);
-         drawFPS_SIZE(canvas);
+
          joystick.draw(canvas);
          drawFood(canvas,camera,bots,mediaPlayer1,mediaPlayer2);
          for(Bot k:bots){
              if(player.Can_SEE_FOOD((int) k.positionX, (int) k.positionY,displayMetrics.widthPixels,displayMetrics.heightPixels))
-                 k.draw(canvas,camera,player,displayMetrics.widthPixels,displayMetrics.heightPixels);
+                     k.draw(canvas,camera,player,displayMetrics.widthPixels,displayMetrics.heightPixels);
          }
         player.draw(canvas,camera);
         drawName(canvas);
+        drawFPS_SIZE(canvas);
     }
-    public void drawFood(Canvas canvas, GameDisplay camera,Bot[] bots, MediaPlayer mediaPlayer,MediaPlayer mediaPlayer1) {
+    public void drawFood(Canvas canvas, Camera camera, Bot[] bots, MediaPlayer mediaPlayer, MediaPlayer mediaPlayer1) {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
 
@@ -162,15 +163,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                     value.EatenFood = 0;
                     value.positionX = Math.random() * 10000;
                     value.positionX = Math.random() * 10000;
-                    //  bot.remove(bots,j);
                 }
-//                if(bots[j].Can_EAT_PL((int) player.positionX, (int) player.positionY, (int) player.radius)){
-//                    player.velocityY = 0;
-//                    player.velocityX = 0;
-//                   // bots[j].radius = Math.sqrt(player.radius*player.radius+ bots[j].radius*bots[j].radius);
-//                    Intent intent = new Intent(Game.this.getContext(),Menu.class);
-//                    player.setColor();
-//                }
+                if(value.Can_EAT_PL((int) player.positionX, (int) player.positionY, (int) player.radius)){
+                    player.velocityY = 0;
+                    player.velocityX = 0;
+                   // bots[j].radius = Math.sqrt(player.radius*player.radius+ bots[j].radius*bots[j].radius);
+                    Intent intent = new Intent(Game.this.getContext(),Menu.class);
+                    startActivity();
+                }
 
             }
 //             масштаб
@@ -198,11 +198,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
 //рисуем  ФПС и размер еды
     public void drawFPS_SIZE (Canvas canvas){
-             //        String averageFPS = Integer.toString((int) gameLoop.getAverageFPS());
+             //     String averageFPS = Integer.toString((int) gameLoop.getAverageFPS());
+                    String m = joystick.findIntersection(canvas);
                     Paint paint = new Paint();
                     paint.setColor(Color.RED);
                     paint.setTextSize(50);
                    // canvas.drawText("FPS = " + averageFPS, 100, 200, paint);
+                    canvas.drawText(m, 100, 200, paint);
                     canvas.drawText("Size = " + (int) player.EatenFood, 100, 100, paint);}
     public void drawName(Canvas canvas){
         Paint paint = new Paint();
@@ -224,4 +226,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void pause() {
         gameLoop.stopLoop();
     }
+    public void startActivity(){
+        startActivity();
+    }
+
 }

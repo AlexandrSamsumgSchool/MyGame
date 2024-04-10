@@ -29,7 +29,7 @@ public class Circle extends GameObject {
     }
 
     @Override
-    public void draw(Canvas canvas, GameDisplay gameDisplay) {
+    public void draw(Canvas canvas, Camera gameDisplay) {
         canvas.drawCircle((float)gameDisplay.gameTOdisplaycoordinateX(positionX),(float)gameDisplay.gameTOdisplaycoordinateY(positionY), (float) radius,paint);
     }
     public boolean CalculateScale(int widthPixels,int heightPixels){
