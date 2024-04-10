@@ -170,7 +170,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 //                   // bots[j].radius = Math.sqrt(player.radius*player.radius+ bots[j].radius*bots[j].radius);
 //                    Intent intent = new Intent(Game.this.getContext(),Menu.class);
 //                    startActivity();
-//                }
+//               }
 
             }
 //             масштаб
