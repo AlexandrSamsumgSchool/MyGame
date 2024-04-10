@@ -164,13 +164,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                     value.positionX = Math.random() * 10000;
                     value.positionX = Math.random() * 10000;
                 }
-                if(value.Can_EAT_PL((int) player.positionX, (int) player.positionY, (int) player.radius)){
-                    player.velocityY = 0;
-                    player.velocityX = 0;
-                   // bots[j].radius = Math.sqrt(player.radius*player.radius+ bots[j].radius*bots[j].radius);
-                    Intent intent = new Intent(Game.this.getContext(),Menu.class);
-                    startActivity();
-                }
+//                if(value.Can_EAT_PL((int) player.positionX, (int) player.positionY, (int) player.radius)){
+//                    player.velocityY = 0;
+//                    player.velocityX = 0;
+//                   // bots[j].radius = Math.sqrt(player.radius*player.radius+ bots[j].radius*bots[j].radius);
+//                    Intent intent = new Intent(Game.this.getContext(),Menu.class);
+//                    startActivity();
+//                }
 
             }
 //             масштаб
@@ -188,23 +188,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         }
 
     }
-//    public void drawButton(Canvas canvas){
-//        Paint paint = new Paint();
-//        paint.setColor(Color.RED);
-//        paint.setStyle(Paint.Style.FILL_AND_STROKE);
-//        canvas.drawCircle(575,800,100,paint);
-//    }
-
-
 //рисуем  ФПС и размер еды
     public void drawFPS_SIZE (Canvas canvas){
-             //     String averageFPS = Integer.toString((int) gameLoop.getAverageFPS());
-                    String m = joystick.findIntersection(canvas);
                     Paint paint = new Paint();
                     paint.setColor(Color.RED);
                     paint.setTextSize(50);
-                   // canvas.drawText("FPS = " + averageFPS, 100, 200, paint);
-                    canvas.drawText(m, 100, 200, paint);
                     canvas.drawText("Size = " + (int) player.EatenFood, 100, 100, paint);}
     public void drawName(Canvas canvas){
         Paint paint = new Paint();
