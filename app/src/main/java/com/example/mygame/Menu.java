@@ -13,7 +13,7 @@ public class Menu extends AppCompatActivity {
     MediaPlayer mediaPlayer ;
     EditText Name ;
     String name;
-    Boolean rp = false;
+    Boolean rp = false,fps = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,13 +34,17 @@ public class Menu extends AppCompatActivity {
             Intent i = new Intent(Menu.this,MainActivity.class);
             name = Name.getText().toString();
             rp = getIntent().getBooleanExtra("Replace",false);
+            fps = getIntent().getBooleanExtra("FPS",false);
             i.putExtra("Replace",rp);
+            i.putExtra("FPS",fps);
             i.putExtra("Name",name);
             startActivity(i);
             mediaPlayer.stop();
+            finish();
         });
         quit.setOnClickListener(v -> {
-            finishAndRemoveTask(); mediaPlayer.stop();
+            finishAndRemoveTask();mediaPlayer.stop();
+
         });
 
         options.setOnClickListener(v -> {

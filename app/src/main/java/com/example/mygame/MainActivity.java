@@ -13,7 +13,8 @@ public class MainActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         String name= getIntent().getStringExtra("Name");
         boolean rp = getIntent().getBooleanExtra("Replace",false);
-        game = new Game(this,name,rp);
+        boolean fps = getIntent().getBooleanExtra("FPS",false);
+        game = new Game(this,name,rp,fps);
         setContentView(game);
 
     }

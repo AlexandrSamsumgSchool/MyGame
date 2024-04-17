@@ -29,8 +29,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private final Resources resources = getResources();
     String name ;
     private int Textsize = 60,textX = 14,textY = 5;
+    boolean fps =false;
 
-    public Game(Context context,String name,boolean rp) {
+    public Game(Context context,String name,boolean rp,boolean fps) {
             super(context);
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
@@ -44,6 +45,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         innerCircleColor = resources.getColor(R.color.magenta);
         outerCircleColor = resources.getColor(R.color.outer);
+
+        this.fps = fps;
         if(rp)joystick = new Joystick(displayMetrics.widthPixels-300,displayMetrics.heightPixels-300/*800*/,displayMetrics.heightPixels/5,displayMetrics.heightPixels/12,innerCircleColor,outerCircleColor);
         else joystick = new Joystick(275,displayMetrics.heightPixels-300/*800*/,displayMetrics.heightPixels/5,displayMetrics.heightPixels/12,innerCircleColor,outerCircleColor);
 
@@ -164,13 +167,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                     value.positionX = Math.random() * 10000;
                     value.positionX = Math.random() * 10000;
                 }
-//                if(value.Can_EAT_PL((int) player.positionX, (int) player.positionY, (int) player.radius)){
-//                    player.velocityY = 0;
-//                    player.velocityX = 0;
-//                   // bots[j].radius = Math.sqrt(player.radius*player.radius+ bots[j].radius*bots[j].radius);
-//                    Intent intent = new Intent(Game.this.getContext(),Menu.class);
-//                    startActivity();
-//               }
+                if(value.Can_EAT_PL((int) player.positionX, (int) player.positionY, (int) player.radius)){
+                    player.velocityY = 0;
+                    player.velocityX = 0;
+                    value.radius = Math.sqrt(player.radius*player.radius+value.radius*value.radius);
+                    player.positionX = 0;
+                    player.positionY = 0;
+                    player.radius = 100;
+               }
 
             }
 //             масштаб
@@ -190,9 +194,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     }
 //рисуем  ФПС и размер еды
     public void drawFPS_SIZE (Canvas canvas){
+        String averageFPS = Double.toString((int)gameLoop.getAverageFPS());
                     Paint paint = new Paint();
                     paint.setColor(Color.RED);
                     paint.setTextSize(50);
+                    if(fps)canvas.drawText("FPS  "+averageFPS,100,200,paint);
                     canvas.drawText("Size = " + (int) player.EatenFood, 100, 100, paint);}
     public void drawName(Canvas canvas){
         Paint paint = new Paint();
@@ -214,8 +220,4 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void pause() {
         gameLoop.stopLoop();
     }
-    public void startActivity(){
-        startActivity();
-    }
-
 }
