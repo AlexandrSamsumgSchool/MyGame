@@ -16,6 +16,8 @@
             android:name=".Options"
             android:exported="false"
             android:screenOrientation="landscape"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+
             />
         <activity
             android:name=".Menu"

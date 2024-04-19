@@ -122,7 +122,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void draw(Canvas canvas) {
          super.draw(canvas);
-         canvas.drawColor(Color.WHITE);
+         canvas.drawColor(Color.BLACK);
          map.drawMap(canvas);
 
          joystick.draw(canvas);
@@ -202,7 +202,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                     canvas.drawText("Size = " + (int) player.EatenFood, 100, 100, paint);}
     public void drawName(Canvas canvas){
         Paint paint = new Paint();
-        paint.setColor(Color.RED);
+        paint.setColor(Color.WHITE);
         paint.setTextSize(Textsize);
         canvas.drawText(name, (float) camera.gameTOdisplaycoordinateX(player.positionX)-textX*name.length(), (float) camera.gameTOdisplaycoordinateY(player.positionY)+textY, paint);
     }

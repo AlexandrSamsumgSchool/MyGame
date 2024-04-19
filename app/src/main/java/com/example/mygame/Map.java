@@ -10,7 +10,7 @@ public class Map {
     int widthPixels,heightPixels;
     DisplayMetrics displayMetrics;
     private int CageX = 0 , CageY = 0;
-    public float Cagesize = 500;
+    public float Cagesize = 600;
     Player player;
     public Map(Camera camera, Player player, int widthPixels, int heightPixels) {
         this.camera = camera;
@@ -23,7 +23,7 @@ public class Map {
     public void drawMap(Canvas canvas){
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(Color.BLACK);
+        paint.setColor(Color.WHITE);
             int w = 0;
             for (int i = 0; i <= 10000; i+=Cagesize) {
                 w += Cagesize;

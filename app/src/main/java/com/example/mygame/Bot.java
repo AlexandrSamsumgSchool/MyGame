@@ -31,8 +31,8 @@ public class Bot extends Circle{
     @Override
     public void update() {
         setDirection();
-        if(tick == 50) {
-            tick-=50;
+        if (tick == 50) {
+            tick -= 50;
             velocityX = MAX_SPEED * dX;
             velocityY = MAX_SPEED * dY;
         }
@@ -40,27 +40,14 @@ public class Bot extends Circle{
         positionY += velocityY;
         tick++;
         Collision();
-        MAX_SPEED = 120/(Math.sqrt(radius));
-        if(EatenFood>75 && radius>100 ){radius=radius-0.0625;EatenFood-=0.0225;}
-        MAX_SPEED = 0.75/(Math.sqrt(radius));
-
-    }
-    public Bot[] remove(Bot[] values, int index) {
-        // Создаем пустой массив размером на один меньше чем исходный
-        // так как мы удаляем один элемент
-        Bot[] result = new Bot[values.length - 1];
-
-        for (int i = 0; i < values.length; i++) {
-            if (i != index) { // Копируем все кроме index
-                // Элементы стоящие дальше index смещаются влево
-                int newIndex = i < index ? i : i - 1;
-                result[newIndex] = values[i];
-            }
+        MAX_SPEED = 120 / (Math.sqrt(radius));
+        if (EatenFood > 75 && radius > 100) {
+            radius = radius - 0.0625;
+            EatenFood -= 0.0225;
         }
+        MAX_SPEED = 0.75 / (Math.sqrt(radius));
 
-        return result;
     }
-
     public void draw(Canvas canvas, Camera camera, Player player, int wp, int hp) {
         Paint paint = new Paint();
         paint.setColor(getColor());

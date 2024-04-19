@@ -15,5 +15,9 @@
         <item name="android:windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
+         <item name="cornerSize">50%</item>
+        <item name="cornerFamily">rounded</item>
+
     </style>
+
 </resources>

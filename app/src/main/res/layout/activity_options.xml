@@ -11,7 +11,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="back"
-
         />
     <TextView
         android:layout_width="wrap_content"
@@ -24,7 +23,7 @@
 
     <SeekBar
         android:id="@+id/seekbar"
-        android:layout_width="200dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
@@ -33,12 +32,12 @@
 
     <CheckBox
         android:id="@+id/sw"
-        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Переместить Joystick вправо"
         android:layout_gravity="center"
-        />
+        android:layout_marginTop="20dp"
+        android:minHeight="48dp"
+        android:text="Переместить Joystick вправо" />
 
     <CheckBox
         android:id="@+id/fps"
@@ -46,6 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
+        android:minHeight="48dp"
         android:text="Показывать FPS" />
 
 </LinearLayout>
