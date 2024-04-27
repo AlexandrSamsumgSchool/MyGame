@@ -45,15 +45,16 @@ public class Bot extends Circle{
             radius = radius - 0.0625;
             EatenFood -= 0.0225;
         }
-        MAX_SPEED = 0.75 / (Math.sqrt(radius));
+        MAX_SPEED = 0.5 / (Math.sqrt(radius));
 
     }
-    public void draw(Canvas canvas, Camera camera, Player player, int wp, int hp) {
+    public void draw(Canvas canvas, CamerA camera, Player player, int wp, int hp) {
         Paint paint = new Paint();
         paint.setColor(getColor());
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         if(player.Can_SEE_FOOD((int) positionX, (int) positionY,wp,hp))
             canvas.drawCircle((float) camera.gameTOdisplaycoordinateX(positionX), (float) camera.gameTOdisplaycoordinateY(positionY), (float) radius,paint);
+
     }
 
 }

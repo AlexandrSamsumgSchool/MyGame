@@ -1,7 +1,12 @@
 package com.example.mygame;
 
 
+import android.graphics.Camera;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+
 import java.util.Random;
 
 public class Points {
@@ -11,8 +16,6 @@ public class Points {
     public   float[] FoodY;
     public int[] Food_Color = new int[MAX_POINTS_FOOD];
     Random rand = new Random();
-
-
     public float getRadiusFood() {
         return radiusFood;
     }
@@ -21,7 +24,6 @@ public class Points {
                 for(int i=0;i<MAX_POINTS_FOOD;i++) {
             PointsX [i]= (float) (Math.random() * 10000);
             Food_Color[i] = Color.argb(255,rand.nextInt(256),rand.nextInt(256),rand.nextInt(256));
-
                 }
         FoodX = PointsX;
     }
@@ -32,13 +34,10 @@ public class Points {
         }
         FoodY = PointsY;
     }
-
     public boolean Can_Eat(int PlayerX, int PlayerY, int circleX, int  circleY, int R){
         return (PlayerX - circleX) * (PlayerX - circleX) + (PlayerY - circleY) * (PlayerY - circleY) <= R * R;
 
     }
-
-
-    }
+}
 
 

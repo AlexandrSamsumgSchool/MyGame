@@ -1,6 +1,6 @@
 package com.example.mygame;
 
-public class Camera {
+public class CamerA {
     private double gameX;
     private double gameY;
     private double gameCenterY;
@@ -9,7 +9,7 @@ public class Camera {
     private double displayCenterY;
     private GameObject centerObject;
 
-    public Camera(int widthPixels, int heightPixels, GameObject centerObject) {
+    public CamerA(int widthPixels, int heightPixels, GameObject centerObject) {
         this.centerObject = centerObject;
         displayCenterX = widthPixels/2.0;
         displayCenterY = heightPixels/2.0;

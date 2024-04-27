@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -23,7 +25,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private final DisplayMetrics displayMetrics;
     private final Joystick joystick;
     private  GameLoop gameLoop;
-    private final Camera camera ;
+    private final CamerA camera ;
     private final Bot bot;
     private final int innerCircleColor,outerCircleColor;
     private final Resources resources = getResources();
@@ -52,8 +54,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
 // создаем игрока и камеру
         player = new Player(getContext(),joystick,Math.random()*8000,Math.random()*8000,100);
-        camera = new Camera(displayMetrics.widthPixels,displayMetrics.heightPixels,player);
-// создаем еду
+        camera = new CamerA(displayMetrics.widthPixels,displayMetrics.heightPixels,player);
+// создаем еду и способности
         points = new Points();
         points.SpawnPointsX();
         points.SpawnPointsY();
@@ -69,7 +71,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         mediaPlayer1 = MediaPlayer.create(this.getContext(),R.raw.eat_dot);
         mediaPlayer2 = MediaPlayer.create(this.getContext(),R.raw.eat_blob);
     }
-// узнаем где произошло нажатие и считаем скорость джойстика
+// узнаем где произошло нажатие и рассчитываем скорость джойстика
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()){
@@ -78,7 +80,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                     joystick.setIsPressed(true);
                     joystick.setActuator(event.getX(), event.getY());
                 }
-               // if((event.getX()-575)*(event.getX()-575)+(event.getY()-800)*(event.getY()-800)<=100*100 ) player.radius/=2;
+             //   if((event.getX()-575)*(event.getX()-575)+(event.getY()-800)*(event.getY()-800)<=100*100 && player.radius > 100){ player.radius-=1;}
                 return true;
                 case MotionEvent.ACTION_MOVE:
                     if(joystick.getIsPressed()){
@@ -122,7 +124,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void draw(Canvas canvas) {
          super.draw(canvas);
-         canvas.drawColor(Color.BLACK);
+         canvas.drawColor(Color.WHITE);
          map.drawMap(canvas);
 
          joystick.draw(canvas);
@@ -134,11 +136,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         player.draw(canvas,camera);
         drawName(canvas);
         drawFPS_SIZE(canvas);
+       // drawButton(canvas);
     }
-    public void drawFood(Canvas canvas, Camera camera, Bot[] bots, MediaPlayer mediaPlayer, MediaPlayer mediaPlayer1) {
+    public void drawFood(Canvas canvas, CamerA camera, Bot[] bots, MediaPlayer mediaPlayer, MediaPlayer mediaPlayer1) {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
-
         for (int i = 0; i < points.MAX_POINTS_FOOD; i++) {
             // player food
             if (points.Can_Eat((int) player.getPositionX(), (int) player.getPositionY(), (int) points.FoodX[i], (int) points.FoodY[i], (int) player.radius)) {
@@ -180,17 +182,16 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 //             масштаб
             if(player.CalculateScale(displayMetrics.widthPixels,displayMetrics.heightPixels) && map.Cagesize > 25)
             {   Textsize*=1.1;textX*=1.1;textY*= 1.1;
-                player.radius = player.radius/1.25;points.radiusFood/=1.25;map.Cagesize/=1.5;Player.MAX_SPEED/=1.25;
+                player.radius = player.radius/1.25;points.radiusFood/=1.25;map.Cagesize/=1.5;Player.MAX_SPEED/=4;
                 for(Bot k:bots){
                     k.radius/=1.5;
                 }
             }
             // рисуем еду
             paint.setColor(points.Food_Color[i]);
-            if (player.Can_SEE_FOOD((int) points.FoodX[i], (int) points.FoodY[i],displayMetrics.widthPixels,displayMetrics.heightPixels)){
+            if (player.Can_SEE_FOOD(points.FoodX[i], points.FoodY[i],displayMetrics.widthPixels,displayMetrics.heightPixels)){
                 canvas.drawCircle((float) camera.gameTOdisplaycoordinateX(points.FoodX[i]), (float) camera.gameTOdisplaycoordinateY(points.FoodY[i]), points.getRadiusFood(), paint);}
         }
-
     }
 //рисуем  ФПС и размер еды
     public void drawFPS_SIZE (Canvas canvas){
@@ -204,9 +205,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setTextSize(Textsize);
-        canvas.drawText(name, (float) camera.gameTOdisplaycoordinateX(player.positionX)-textX*name.length(), (float) camera.gameTOdisplaycoordinateY(player.positionY)+textY, paint);
+        canvas.drawText(name,(float) camera.gameTOdisplaycoordinateX(player.positionX)-textX*name.length(), (float) camera.gameTOdisplaycoordinateY(player.positionY)+textY, paint);
     }
-
+//    public void drawButton(Canvas canvas){
+//        Paint paint = new Paint();
+//        paint.setColor(Color.GRAY);
+//        canvas.drawCircle(575,800,100,paint);
+//    }
     //обновляем игроком карту и расположение камеры
     public void update() {
     camera.update();

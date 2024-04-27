@@ -44,12 +44,13 @@ public class Menu extends AppCompatActivity {
         });
         quit.setOnClickListener(v -> {
             finishAndRemoveTask();mediaPlayer.stop();
-
+           finish();
         });
 
         options.setOnClickListener(v -> {
             Intent i = new Intent(Menu.this,Options.class);
             startActivity(i);
+            finish();
         });
 
 
