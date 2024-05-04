@@ -1,6 +1,6 @@
 package com.example.mygame;
 
-import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -9,18 +9,15 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.RadioButton;
 import android.widget.SeekBar;
 
-import java.util.Map;
-import java.util.Set;
 
 
 public class Options extends AppCompatActivity {
     AudioManager audioManager;
     int volume ;
     CheckBox replace,FPS;
-    boolean FPs,Replace;
+    boolean FPs,Replace,isLaunched = false;
     private SharedPreferences mSettings;
 
     @Override
@@ -35,12 +32,8 @@ public class Options extends AppCompatActivity {
         FPS = findViewById(R.id.fps);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         volume = mSettings.getInt("Volume", 50);
-
-
         FPS.setChecked( mSettings.getBoolean("FPS",false));
         replace.setChecked(mSettings.getBoolean("Replace",false));
-        seekBar.setProgress(volume);
-
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress , boolean fromUser) {
@@ -68,6 +61,7 @@ public class Options extends AppCompatActivity {
             else i.putExtra("Replace",Replace);
             if(FPS.isChecked())i.putExtra("FPS",true);
             else i.putExtra("FPS",FPs);
+            i.putExtra("IsL",isLaunched);
             SharedPreferences.Editor editor = mSettings.edit();
             editor.putInt("Volume", volume);
             editor.putBoolean("FPS", FPs);

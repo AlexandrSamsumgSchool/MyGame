@@ -9,7 +9,8 @@ public class Map {
     CamerA camera;
     int widthPixels,heightPixels;
     DisplayMetrics displayMetrics;
-    private int CageX = 0 , CageY = 0;
+    private final int CageX = 0;
+    private final int CageY = 0;
     public float Cagesize = 600;
     Player player;
     public Map(CamerA camera, Player player, int widthPixels, int heightPixels) {
@@ -45,8 +46,5 @@ public class Map {
 //            canvas.drawLine(CageX,w, widthPixels,w, paint);
 //        }
 
-    }
-    public  void update(){
-        if((widthPixels/4<=player.radius || heightPixels/4<=player.radius ))Cagesize/=2;
     }
 }

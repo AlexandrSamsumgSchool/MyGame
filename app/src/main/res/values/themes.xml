@@ -7,7 +7,7 @@
 
     <style name="Theme.MyGame" parent="Base.Theme.MyGame" />
     <style name="SplathTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <item name="android:windowBackground">@drawable/splashscreen</item>
+        <item name="android:windowBackground"></item>
     </style>
 
     <style name="Theme.AppCompat.Light.NoActionBar.FullScreen" parent="@style/Theme.AppCompat.Light.NoActionBar">

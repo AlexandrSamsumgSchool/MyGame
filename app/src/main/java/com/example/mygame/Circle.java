@@ -37,6 +37,9 @@ public class Circle extends GameObject {
         return (widthPixels/4<=radius || heightPixels/4<=radius);
 
     }
+    public boolean calculateScale2(int widthPixels,int heightPixels){
+        return (widthPixels/10>radius || heightPixels/10>radius);
+    }
     public void Collision(){
         if(positionX-radius <= 0)positionX =radius;
         if(positionX+radius >= 10000)positionX = 10000-radius;

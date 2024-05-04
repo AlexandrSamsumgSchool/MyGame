@@ -5,7 +5,7 @@ import androidx.core.content.ContextCompat;
 
 public class Player extends Circle  {
     public float EatenFood = 0;
-    public static double MAX_SPEED = 10;
+    public  double MAX_SPEED = 10;
     public double mass;
     private final Joystick joystick;
 
@@ -27,6 +27,6 @@ public class Player extends Circle  {
         }
 
     public  boolean Can_SEE_FOOD(float pX,float pY,int wp,int hp){
-        return (positionX+wp>pX && positionX-wp<pX && positionY+hp>pY && positionY-hp<pY);
+        return (positionX+wp>pX && positionX-wp<pX && positionY+hp*2>pY && positionY-hp*2<pY);
     }
     }

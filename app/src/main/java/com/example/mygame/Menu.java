@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class Menu extends AppCompatActivity {
-    Button play,quit,options;
+    Button play,quit,options,teach;
     MediaPlayer mediaPlayer ;
     EditText Name ;
     String name;
@@ -30,6 +30,7 @@ public class Menu extends AppCompatActivity {
         play = findViewById(R.id.play);
         quit = findViewById(R.id.quit);
         options = findViewById(R.id.options);
+        teach = findViewById(R.id.teach);
         play.setOnClickListener(v -> {
             Intent i = new Intent(Menu.this,MainActivity.class);
             name = Name.getText().toString();
@@ -44,12 +45,18 @@ public class Menu extends AppCompatActivity {
         });
         quit.setOnClickListener(v -> {
             finishAndRemoveTask();mediaPlayer.stop();
-           finish();
+            finish();
         });
 
         options.setOnClickListener(v -> {
             Intent i = new Intent(Menu.this,Options.class);
             startActivity(i);
+            finish();
+        });
+        teach.setOnClickListener(v -> {
+            Intent i = new Intent(Menu.this, Teach.class);
+            startActivity(i);
+            mediaPlayer.stop();
             finish();
         });
 
