@@ -53,16 +53,16 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         if(rp)joystick = new Joystick(displayMetrics.widthPixels-300,displayMetrics.heightPixels-300/*800*/,displayMetrics.heightPixels/5,displayMetrics.heightPixels/12,innerCircleColor,outerCircleColor);
         else joystick = new Joystick(275,displayMetrics.heightPixels-300/*800*/,displayMetrics.heightPixels/5,displayMetrics.heightPixels/12,innerCircleColor,outerCircleColor);
 
-// создаем игрока и камеру
+        // создаем игрока и камеру
         player = new Player(getContext(),joystick,Math.random()*8000,Math.random()*8000,150);
         camera = new CamerA(displayMetrics.widthPixels,displayMetrics.heightPixels,player);
-// создаем еду и способности
+        // создаем еду и способности
         points = new Points();
         points.SpawnPointsX();
         points.SpawnPointsY();
-// карта
+        // карта
         map = new Map(camera,player,displayMetrics.widthPixels,displayMetrics.heightPixels);
-// создаем ботов
+        // создаем ботов
         bot = new Bot();
         bots = new Bot[Bot.Bots];
         for(int i=0;i<Bot.Bots;i++) {
@@ -117,7 +117,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-
     }
 
     @Override
@@ -141,7 +140,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         joystick.draw(canvas);
        if(player.isEaten){
            Draw_Game_Over(canvas);
-
        }
     }
 
@@ -163,10 +161,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     //обновляем игроком карту и расположение камеры
     public void update() {
         if(player.isEaten) {
-
-            Textsize*=0;
+            Textsize=0;
             return;
-
         }
     camera.update();
     joystick.update();
@@ -176,12 +172,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     player.update();
         // Масштаб
         if(player.CalculateScale(displayMetrics.widthPixels,displayMetrics.heightPixels) && map.Cagesize > 25)
-        {   Textsize*=1.1;textX*=1.1;textY*= 1.1;
-            player.radius = player.radius/1.25;points.radiusFood/=1.25;map.Cagesize/=1.25;player.MAX_SPEED/=2;
+        {   Textsize*=1.05;textX*=1.072222222111111;textY*= 1.06;
+            player.radius = player.radius/1.1;points.radiusFood/=1.1;map.Cagesize/=1.2;player.MAX_SPEED/=1.1;
             for(Bot k:bots){
                 k.radius/=1.25;
             }
         }
+        map.update();
     }
     public void Draw_Game_Over(Canvas canvas){
         String text = "Game Over";
@@ -207,7 +204,5 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 // при закрытии игры останавливаем цикл игры
-    public void pause() {
-        gameLoop.stopLoop();
-    }
+    public void pause() {gameLoop.stopLoop();}
 }

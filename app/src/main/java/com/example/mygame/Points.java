@@ -61,19 +61,23 @@ public class Points extends Circle{
                     value.velocityY = 0;
                     value.velocityX = 0;
                     player.radius = Math.sqrt(player.radius * player.radius + value.radius * value.radius);
-                    value.radius = 100;
+                    value.radius = Math.random()*200+100;
                     player.EatenFood += value.EatenFood;
                     value.EatenFood = 0;
-                    value.positionX = Math.random() * 10000;
-                    value.positionX = Math.random() * 10000;
+                    value.positionX = Math.random() * 8000+1000;
+                    value.positionX = Math.random() * 8000+1000;
                 }
                 if(value.Can_EAT_PL((int) player.positionX, (int) player.positionY, (int) player.radius)){
-                    player.velocityY = 0;
-                    player.velocityX = 0;
-                    value.radius = Math.sqrt(player.radius*player.radius+value.radius*value.radius);
-                    player.positionX = 5000;
-                    player.positionY = 5000;
                     player.isEaten = true;
+
+                }
+                for(int l = 0 ;l<bots.length;l++) {
+                    if (value.Can_EAT_PL((int) bots[l].positionX, (int) bots[l].positionY, (int) bots[l].radius) && value!=bots[l]) {
+                        value.radius = Math.sqrt(player.radius*player.radius+value.radius*value.radius);
+                        bots[l].positionX = Math.random() * 8000+1000;
+                        bots[l].positionX = Math.random() * 8000+1000;
+                        bots[l].radius = Math.random()*200+100;
+                    }
                 }
             }
             // рисуем еду

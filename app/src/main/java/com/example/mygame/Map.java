@@ -12,6 +12,7 @@ public class Map {
     private final int CageX = 0;
     private final int CageY = 0;
     public float Cagesize = 600;
+    private float   Wx = 0, Wy = 0;
     Player player;
     public Map(CamerA camera, Player player, int widthPixels, int heightPixels) {
         this.camera = camera;
@@ -25,26 +26,20 @@ public class Map {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(Color.BLACK);
-            int w = 0;
-            for (int i = 0; i <= 10000; i+=Cagesize) {
-                w += Cagesize;
-                canvas.drawLine((float) camera.gameTOdisplaycoordinateX(w),
-                        (float) camera.gameTOdisplaycoordinateY(CageY), (float) camera.gameTOdisplaycoordinateX(w),
-                        (float) camera.gameTOdisplaycoordinateY(10000), paint);
+        for(int i=0;i<widthPixels/Cagesize+2;i++){
+            Wx+=Cagesize;
+            canvas.drawLine(Wx, CageY,Wx, heightPixels+100, paint);
+        }
 
-                canvas.drawLine((float) camera.gameTOdisplaycoordinateX(CageX), (float) camera.gameTOdisplaycoordinateY(w),
-                        (float) camera.gameTOdisplaycoordinateX(10000),
-                        (float) camera.gameTOdisplaycoordinateY(w), paint);
-            }
-//        for(int i=0;i<widthPixels/Cagesize+2;i++){
-//            w+=Cagesize;
-//            canvas.drawLine(w, CageY, w, heightPixels, paint);
-//        }
-//        w=0;
-//        for(int i=0;i<heightPixels/Cagesize+2;i++){
-//            w+=Cagesize;
-//            canvas.drawLine(CageX,w, widthPixels,w, paint);
-//        }
-
+        for(int i=0;i<heightPixels/Cagesize+2;i++){
+            Wy+=Cagesize;
+            canvas.drawLine(CageX,Wy, widthPixels+200,Wy, paint);
+        }
+       Wx = 0;
+       Wy = 0;
+    }
+    public void update(){
+        Wx = (float) (-Cagesize+(-player.positionX)%Cagesize);
+        Wy= (float) (-Cagesize+(-player.positionY)%Cagesize);
     }
 }

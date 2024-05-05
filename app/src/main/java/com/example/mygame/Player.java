@@ -22,7 +22,7 @@ public class Player extends Circle  {
         positionX += velocityX;
         positionY += velocityY;
         if(EatenFood>75 && radius>100 ){radius=radius-0.0325;EatenFood-=0.0325;}
-        MAX_SPEED = 120/(Math.sqrt(radius));
+//        MAX_SPEED = 120/(Math.sqrt(radius));
         mass = 1/(Math.sqrt(radius))+1;
         Collision();
         }
