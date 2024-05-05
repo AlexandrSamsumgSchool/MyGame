@@ -193,11 +193,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         Paint paint = new Paint();
         paint.setColor(Color.RED);
-        float textSize = 150;
+        float textSize = 200;
         paint.setTextSize(textSize);
 
-        canvas.drawText(text,  x, y, paint);
+        canvas.drawText(text,  x-150, y, paint);
         paint.setColor(Color.BLACK);
+        textSize = 150;
+        paint.setTextSize(textSize);
+
         canvas.drawText(text1, x, y+200, paint);
         canvas.drawText(text2, x, y+400, paint);
         canvas.drawText(text3, x, y+600, paint);
