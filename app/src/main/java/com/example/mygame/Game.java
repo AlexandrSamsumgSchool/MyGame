@@ -1,12 +1,16 @@
 package com.example.mygame;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -62,7 +66,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         bot = new Bot();
         bots = new Bot[Bot.Bots];
         for(int i=0;i<Bot.Bots;i++) {
-            bots[i] = new Bot(player.getColor(), bot.SpawnBotX(), bot.SpawnBotY(), Math.random()*500+100);
+            bots[i] = new Bot(player.getColor(), bot.SpawnBotX(), bot.SpawnBotY(), Math.random()*200+100);
         }
         // обработка звуков
         mediaPlayer1 = MediaPlayer.create(this.getContext(),R.raw.eat_dot);
@@ -76,6 +80,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                 if(joystick.isPressed(event.getX(), event.getY())){
                     joystick.setIsPressed(true);
                     joystick.setActuator(event.getX(), event.getY());
+                }
+                // выход в меню
+                if(player.isEaten) {
+                    Intent intent = new Intent(getContext(),Menu.class);
+                    startActivity(getContext(),intent, new Bundle());
                 }
                 return true;
                 case MotionEvent.ACTION_MOVE:
@@ -93,7 +102,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         }
         return super.onTouchEvent(event);
     }
-
 
 
 
@@ -131,6 +139,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         drawName(canvas);
         drawFPS_SIZE(canvas);
         joystick.draw(canvas);
+       if(player.isEaten){
+           Draw_Game_Over(canvas);
+
+       }
     }
 
 //рисуем  ФПС и размер еды
@@ -140,7 +152,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                     paint.setColor(Color.RED);
                     paint.setTextSize(50);
                     if(fps)canvas.drawText("FPS  "+averageFPS,100,200,paint);
-                    canvas.drawText("Size = " + (int) player.EatenFood, 100, 100, paint);}
+                    canvas.drawText("Size = " + (int) player.EatenFood, 100, 100, paint);
+    }
     public void drawName(Canvas canvas){
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
@@ -149,6 +162,12 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     }
     //обновляем игроком карту и расположение камеры
     public void update() {
+        if(player.isEaten) {
+
+            Textsize*=0;
+            return;
+
+        }
     camera.update();
     joystick.update();
         for(Bot k:bots){
@@ -158,19 +177,32 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         // Масштаб
         if(player.CalculateScale(displayMetrics.widthPixels,displayMetrics.heightPixels) && map.Cagesize > 25)
         {   Textsize*=1.1;textX*=1.1;textY*= 1.1;
-            player.radius = player.radius/1.25;points.radiusFood/=1.25;map.Cagesize/=1.5;player.MAX_SPEED/=2;
+            player.radius = player.radius/1.25;points.radiusFood/=1.25;map.Cagesize/=1.25;player.MAX_SPEED/=2;
             for(Bot k:bots){
                 k.radius/=1.25;
             }
         }
-//        else if(player.calculateScale2(displayMetrics.widthPixels,displayMetrics.heightPixels)){
-//            Textsize/=1.1;textX/=1.1;textY/= 1.1;
-//            player.radius = player.radius*1.25;points.radiusFood*=1.25;map.Cagesize*=1.5;Player.MAX_SPEED*=4;
-//            for(Bot k:bots){
-//                k.radius*=1.5;
-//            }
-//        }
     }
+    public void Draw_Game_Over(Canvas canvas){
+        String text = "Game Over";
+        String text1 = "Size = "+ (int)player.EatenFood;
+        String text2 = "Radius = "+(int)player.radius;
+        String text3 = "В меню  ";
+        float x = displayMetrics.widthPixels/2-325;
+        float y = displayMetrics.heightPixels/2-300;
+
+        Paint paint = new Paint();
+        paint.setColor(Color.RED);
+        float textSize = 150;
+        paint.setTextSize(textSize);
+
+        canvas.drawText(text,  x, y, paint);
+        paint.setColor(Color.BLACK);
+        canvas.drawText(text1, x, y+200, paint);
+        canvas.drawText(text2, x, y+400, paint);
+        canvas.drawText(text3, x, y+600, paint);
+    }
+
 // при закрытии игры останавливаем цикл игры
     public void pause() {
         gameLoop.stopLoop();

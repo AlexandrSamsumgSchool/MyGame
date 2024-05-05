@@ -7,7 +7,14 @@ public class GameLoop extends Thread{
     private final SurfaceHolder surfaceHolder;
     private final Game game;
     private double averageFPS;
-    public  long startTime;
+
+
+
+    public void setRunning(boolean running) {
+        isRunning = running;
+    }
+
+    private long startTime;
     public GameLoop(Game game, SurfaceHolder surfaceHolder) {
         this.surfaceHolder = surfaceHolder;
         this.game = game;

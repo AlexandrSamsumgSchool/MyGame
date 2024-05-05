@@ -71,9 +71,9 @@ public class Points extends Circle{
                     player.velocityY = 0;
                     player.velocityX = 0;
                     value.radius = Math.sqrt(player.radius*player.radius+value.radius*value.radius);
-                    player.positionX = 0;
-                    player.positionY = 0;
-                    player.radius = 100;
+                    player.positionX = 5000;
+                    player.positionY = 5000;
+                    player.isEaten = true;
                 }
             }
             // рисуем еду

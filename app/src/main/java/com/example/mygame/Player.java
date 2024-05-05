@@ -7,6 +7,7 @@ public class Player extends Circle  {
     public float EatenFood = 0;
     public  double MAX_SPEED = 10;
     public double mass;
+    public boolean isEaten = false;
     private final Joystick joystick;
 
 
