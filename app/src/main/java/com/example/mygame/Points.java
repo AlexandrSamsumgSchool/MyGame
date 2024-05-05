@@ -71,14 +71,14 @@ public class Points extends Circle{
                     player.isEaten = true;
 
                 }
-                for(int l = 0 ;l<bots.length;l++) {
-                    if (value.Can_EAT_PL((int) bots[l].positionX, (int) bots[l].positionY, (int) bots[l].radius) && value!=bots[l]) {
-                        value.radius = Math.sqrt(player.radius*player.radius+value.radius*value.radius);
-                        bots[l].positionX = Math.random() * 8000+1000;
-                        bots[l].positionX = Math.random() * 8000+1000;
-                        bots[l].radius = Math.random()*200+100;
-                    }
-                }
+//                for(int l = 0 ;l<bots.length;l++) {
+//                    if (value.Can_EAT_PL((int) bots[l].positionX, (int) bots[l].positionY, (int) bots[l].radius) && value!=bots[l]) {
+//                        value.radius = Math.sqrt(player.radius*player.radius+value.radius*value.radius);
+//                        bots[l].positionX = Math.random() * 8000+1000;
+//                        bots[l].positionX = Math.random() * 8000+1000;
+//                        bots[l].radius = Math.random()*200+100;
+//                    }
+//                }
             }
             // рисуем еду
             paint.setColor(Food_Color[i]);

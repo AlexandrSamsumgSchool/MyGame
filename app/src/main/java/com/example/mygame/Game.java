@@ -172,7 +172,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     player.update();
         // Масштаб
         if(player.CalculateScale(displayMetrics.widthPixels,displayMetrics.heightPixels) && map.Cagesize > 25)
-        {   Textsize*=1.05;textX*=1.072222222111111;textY*= 1.06;
+        {   Textsize*=1.05;textX*=1.072222222111;textY*= 1.06;
             player.radius = player.radius/1.1;points.radiusFood/=1.1;map.Cagesize/=1.2;player.MAX_SPEED/=1.1;
             for(Bot k:bots){
                 k.radius/=1.25;
