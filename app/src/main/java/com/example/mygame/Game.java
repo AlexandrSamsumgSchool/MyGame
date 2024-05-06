@@ -31,6 +31,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     String name;
     private int Textsize = 60,textX = 14,textY = 5;
     boolean fps  ;
+    //сделать нормальное расположение имени
 
     public Game(Context context,String name,boolean rp,boolean fps) {
             super(context);
@@ -44,8 +45,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         else this.name = name;
         // создаем джойстик,учитывая расположение (справа или слева)
 
-         int innerCircleColor = R.color.magenta;
-         int outerCircleColor = R.color.outer;
+         int innerCircleColor = R.color.outer;
+         int outerCircleColor = R.color.inner;
 
         this.fps = fps;
         if(rp)joystick = new Joystick(displayMetrics.widthPixels-300,displayMetrics.heightPixels-300/*800*/,displayMetrics.heightPixels/5,displayMetrics.heightPixels/12,innerCircleColor,outerCircleColor);
@@ -173,7 +174,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         // Масштаб
         if(player.CalculateScale(displayMetrics.widthPixels,displayMetrics.heightPixels) && map.Cagesize > 25)
         {   Textsize*=1.05;textX*=1.072222222111;textY*= 1.06;
-            player.radius = player.radius/1.1;points.radiusFood/=1.1;map.Cagesize/=1.2;player.MAX_SPEED/=1.07;
+            player.radius = player.radius/1.1;points.radiusFood/=1.1;map.Cagesize/=1.2;player.MAX_SPEED/=1.09;
             for(Bot k:bots){
                 k.radius/=1.25;
             }
