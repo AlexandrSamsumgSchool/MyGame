@@ -9,8 +9,7 @@ public class Map {
     CamerA camera;
     int widthPixels,heightPixels;
     DisplayMetrics displayMetrics;
-    private final int CageX = 0;
-    private final int CageY = 0;
+
     public float Cagesize = 600;
     private float   Wx = 0, Wy = 0;
     Player player;
@@ -28,12 +27,12 @@ public class Map {
         paint.setColor(Color.BLACK);
         for(int i=0;i<widthPixels/Cagesize+2;i++){
             Wx+=Cagesize;
-            canvas.drawLine(Wx, CageY,Wx, heightPixels+100, paint);
+            canvas.drawLine(Wx, 0,Wx, heightPixels+200, paint);
         }
 
         for(int i=0;i<heightPixels/Cagesize+2;i++){
             Wy+=Cagesize;
-            canvas.drawLine(CageX,Wy, widthPixels+200,Wy, paint);
+            canvas.drawLine(0,Wy, widthPixels+200,Wy, paint);
         }
        Wx = 0;
        Wy = 0;

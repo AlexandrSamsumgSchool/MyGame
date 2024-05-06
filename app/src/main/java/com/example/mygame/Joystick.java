@@ -80,36 +80,6 @@ public class Joystick {
         actuatorY = 0.0;
         actuatorX = 0.0;
     }
-//    public String findIntersection(Canvas canvas) {
-//        double x0 = outerCircleCenterPositionX;
-//        double y0 = outerCircleCenterPositionY;
-//        double x1 = outerCircleCenterPositionX,y1 = outerCircleCenterPositionY,x2 = innerCircleCenterPositionX,y2 = innerCircleCenterPositionY;
-//        double r = outerCircleRadius;
-//        double a = y2-y1;
-//        double b = x1-x2;
-//        double c = (-1) * (a * x1 + b * y1);
-//        double m = -a/b;
-//        double n = -c/b;
-//        double A = 1 + m*m;
-//        double B = 2*m*(n - y0) - 2*x0;
-//        double C = x0*x0 + (n - y0)*(n - y0) - r*r;
-//
-//        double D = B*B - 4*A*C;
-//
-//            double xm = (-B + Math.sqrt(D))/(2*A);
-//            double ym = m*x1 + n;
-//
-//            double x2m = (-B - Math.sqrt(D))/(2*A);
-//            double y2m = m*x2 + n;
-//            Paint paint = new Paint();
-//            paint.setColor(Color.RED);
-//            if(((xm-innerCircleCenterPositionX)*(xm-innerCircleCenterPositionX)+(ym-innerCircleCenterPositionY)*(ym-innerCircleCenterPositionY))<(((x2m-innerCircleCenterPositionX)*(x2m-innerCircleCenterPositionX)+(y2m-innerCircleCenterPositionY)*(y2m-innerCircleCenterPositionY))))
-//                canvas.drawCircle((float) xm, (float) ym,50,paint);
-//            else   canvas.drawCircle((float) x2m, (float) y2m,50,paint);
-//            return ("Точка 1: (" + xm + ", " + ym + ")")+("Точка 2: (" + x2m + ", " + y2m + ")");
-//
-//
-//    }
     public double getActuatorX() {
         return actuatorX;
     }

@@ -2,10 +2,10 @@ package com.example.mygame;
 
 import static androidx.core.content.ContextCompat.startActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -27,9 +27,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private final Joystick joystick;
     private  GameLoop gameLoop;
     private final CamerA camera ;
-    private final Bot bot;
-    private final int innerCircleColor,outerCircleColor;
-    private final Resources resources = getResources();
+
     String name;
     private int Textsize = 60,textX = 14,textY = 5;
     boolean fps  ;
@@ -46,8 +44,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         else this.name = name;
         // создаем джойстик,учитывая расположение (справа или слева)
 
-        innerCircleColor = resources.getColor(R.color.magenta);
-        outerCircleColor = resources.getColor(R.color.outer);
+         int innerCircleColor = R.color.magenta;
+         int outerCircleColor = R.color.outer;
 
         this.fps = fps;
         if(rp)joystick = new Joystick(displayMetrics.widthPixels-300,displayMetrics.heightPixels-300/*800*/,displayMetrics.heightPixels/5,displayMetrics.heightPixels/12,innerCircleColor,outerCircleColor);
@@ -63,7 +61,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         // карта
         map = new Map(camera,player,displayMetrics.widthPixels,displayMetrics.heightPixels);
         // создаем ботов
-        bot = new Bot();
+        Bot bot = new Bot();
         bots = new Bot[Bot.Bots];
         for(int i=0;i<Bot.Bots;i++) {
             bots[i] = new Bot(player.getColor(), bot.SpawnBotX(), bot.SpawnBotY(), Math.random()*200+100);
@@ -73,6 +71,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         mediaPlayer2 = MediaPlayer.create(this.getContext(),R.raw.eat_blob);
     }
 // узнаем где произошло нажатие и рассчитываем скорость джойстика
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()){
@@ -85,6 +84,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                 if(player.isEaten) {
                     Intent intent = new Intent(getContext(),Menu.class);
                     startActivity(getContext(),intent, new Bundle());
+
                 }
                 return true;
                 case MotionEvent.ACTION_MOVE:
@@ -173,7 +173,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         // Масштаб
         if(player.CalculateScale(displayMetrics.widthPixels,displayMetrics.heightPixels) && map.Cagesize > 25)
         {   Textsize*=1.05;textX*=1.072222222111;textY*= 1.06;
-            player.radius = player.radius/1.1;points.radiusFood/=1.1;map.Cagesize/=1.2;player.MAX_SPEED/=1.1;
+            player.radius = player.radius/1.1;points.radiusFood/=1.1;map.Cagesize/=1.2;player.MAX_SPEED/=1.07;
             for(Bot k:bots){
                 k.radius/=1.25;
             }
@@ -185,8 +185,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         String text1 = "Size = "+ (int)player.EatenFood;
         String text2 = "Radius = "+(int)player.radius;
         String text3 = "В меню  ";
-        float x = displayMetrics.widthPixels/2-325;
-        float y = displayMetrics.heightPixels/2-300;
+        int x = displayMetrics.widthPixels/2-325;
+        int y = displayMetrics.heightPixels/2-300;
 
         Paint paint = new Paint();
         paint.setColor(Color.RED);
