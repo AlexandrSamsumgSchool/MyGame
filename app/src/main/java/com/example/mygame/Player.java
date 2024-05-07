@@ -6,7 +6,7 @@ import androidx.core.content.ContextCompat;
 public class Player extends Circle  {
     public float EatenFood = 0;
     public  double MAX_SPEED = 10;
-    public double mass;
+    public double mass = 2 ;
     public boolean isEaten = false;
     private final Joystick joystick;
 
@@ -21,8 +21,8 @@ public class Player extends Circle  {
         velocityY = joystick.getActuatorY() * MAX_SPEED;
         positionX += velocityX;
         positionY += velocityY;
-        if(EatenFood>75 && radius>100 ){radius=radius-0.0325;EatenFood-=0.0325;}
-        mass = 1/(Math.sqrt(radius))+1;
+        if(EatenFood>75 && radius>100 ){radius=radius-0.0325;EatenFood-=0.0125;}
+
         Collision();
         }
 

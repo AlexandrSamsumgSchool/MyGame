@@ -6,7 +6,7 @@ import android.graphics.Paint;
 public class Bot extends Circle{
     private int dX,dY;//направление рандомное
     private int tick = 0;
-    public static  double MAX_SPEED = 0.07;
+    public static  double MAX_SPEED = 10;
     public int EatenFood = 0;
     public static final int Bots = 25;
     public Bot(int color, double positionX, double positionY, double radius) {
@@ -20,8 +20,8 @@ public class Bot extends Circle{
             return (int)(Math.random()*10000);
     }
     public void setDirection(){
-        dX = (int)(Math.random()*200-100);
-        dY = (int)(Math.random()*200-100);
+        dX = (int)(Math.random()*4-2);
+        dY = (int)(Math.random()*4-2);
     }
 
     public Bot() {
@@ -45,7 +45,7 @@ public class Bot extends Circle{
             radius = radius - 0.0625;
             EatenFood -= 0.0225;
         }
-        MAX_SPEED = 0.5 / (Math.sqrt(radius));
+
 
     }
     public void draw(Canvas canvas, CamerA camera, Player player, int wp, int hp) {

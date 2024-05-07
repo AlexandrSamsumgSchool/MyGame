@@ -45,8 +45,8 @@ public class Points extends Circle{
                 mediaPlayer.start();
                 FoodX[i] = (int) (Math.random() * 10000);
                 FoodY[i] = (int) (Math.random() * 10000);
-                player.radius += player.mass;
-                player.EatenFood += 1;
+                player.radius+=player.mass;
+                player.EatenFood+= 1;
             }
 //            bot food определяем ее координаты если сьели (телепортируем на новое место)
             for (Bot value : bots) {
@@ -69,7 +69,6 @@ public class Points extends Circle{
                 }
                 if(value.Can_EAT_PL((int) player.positionX, (int) player.positionY, (int) player.radius)){
                     player.isEaten = true;
-
                 }
 //                for(int l = 0 ;l<bots.length;l++) {
 //                    if (value.Can_EAT_PL((int) bots[l].positionX, (int) bots[l].positionY, (int) bots[l].radius) && value!=bots[l]) {

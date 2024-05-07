@@ -62,17 +62,17 @@ public class Joystick {
     }
 
     public void setActuator(double touchPositionX, double touchPositionY) {
-        double deltaX = touchPositionX - outerCircleCenterPositionX;
-        double deltaY = touchPositionY- outerCircleCenterPositionY;
-        double deltadistance = Math.sqrt(Math.pow(deltaX,2)+Math.pow(deltaY,2));
+        double dX = touchPositionX - outerCircleCenterPositionX;
+        double dY = touchPositionY- outerCircleCenterPositionY;
+        double deltadistance = Math.sqrt(Math.pow(dX,2)+Math.pow(dY,2));
         if(deltadistance<outerCircleRadius){
-            actuatorX = deltaX/outerCircleRadius;
-            actuatorY = deltaY/outerCircleRadius;
+            actuatorX = dX/outerCircleRadius;
+            actuatorY = dY/outerCircleRadius;
         }
         else
         {
-            actuatorX =deltaX/deltadistance;
-            actuatorY = deltaY/deltadistance;
+            actuatorX =dX/deltadistance;
+            actuatorY = dY/deltadistance;
         }
     }
 

@@ -16,7 +16,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import androidx.annotation.NonNull;
-
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private final Player player;
     private final MediaPlayer mediaPlayer1,mediaPlayer2 ;
@@ -66,6 +65,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         bots = new Bot[Bot.Bots];
         for(int i=0;i<Bot.Bots;i++) {
             bots[i] = new Bot(player.getColor(), bot.SpawnBotX(), bot.SpawnBotY(), Math.random()*200+100);
+            if(bots[i].Can_EAT_PL((int) player.positionX, (int) player.positionY, (int) player.radius)){
+                bots[i].positionX = bot.SpawnBotX();
+                bots[i].positionY = bot.SpawnBotY();
+            }
         }
         // обработка звуков
         mediaPlayer1 = MediaPlayer.create(this.getContext(),R.raw.eat_dot);
@@ -132,7 +135,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
          map.drawMap(canvas);
          points.Draw(canvas,camera,bots,mediaPlayer1,mediaPlayer2,displayMetrics,player);
          for(Bot k:bots){
-             if(player.Can_SEE_FOOD((int) k.positionX, (int) k.positionY,displayMetrics.widthPixels,displayMetrics.heightPixels))
                      k.draw(canvas,camera,player,displayMetrics.widthPixels,displayMetrics.heightPixels);
          }
         player.draw(canvas,camera);
@@ -146,7 +148,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
 //рисуем  ФПС и размер еды
     public void drawFPS_SIZE (Canvas canvas){
-        String averageFPS = Double.toString((int)gameLoop.getAverageFPS());
+        String averageFPS = Integer.toString((int)gameLoop.getAverageFPS());
                     Paint paint = new Paint();
                     paint.setColor(Color.RED);
                     paint.setTextSize(50);
@@ -157,7 +159,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setTextSize(Textsize);
-        canvas.drawText(name,(float) camera.gameTOdisplaycoordinateX(player.positionX)-textX*name.length(), (float) camera.gameTOdisplaycoordinateY(player.positionY)+textY, paint);
+        canvas.drawText(name, displayMetrics.widthPixels/2-textX*name.length(), displayMetrics.heightPixels/2+textY, paint);
     }
     //обновляем игроком карту и расположение камеры
     public void update() {
