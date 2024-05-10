@@ -33,7 +33,8 @@ public class Menu extends AppCompatActivity {
         teach = findViewById(R.id.teach);
         play.setOnClickListener(v -> {
             Intent i = new Intent(Menu.this,MainActivity.class);
-            name = Name.getText().toString();
+             if(Name.getText().toString().isEmpty())name = "Player";
+             else name = Name.getText().toString();
             rp = getIntent().getBooleanExtra("Replace",false);
             fps = getIntent().getBooleanExtra("FPS",false);
             i.putExtra("Replace",rp);

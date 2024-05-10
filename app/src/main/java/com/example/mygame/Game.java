@@ -40,8 +40,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
          gameLoop = new GameLoop(this,surfaceHolder);
         displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        if(name.isEmpty())this.name = "Player";
-        else this.name = name;
+        this.name = name;
         // создаем джойстик,учитывая расположение (справа или слева)
 
          int innerCircleColor = R.color.outer;

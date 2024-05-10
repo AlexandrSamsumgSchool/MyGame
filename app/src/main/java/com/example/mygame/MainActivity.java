@@ -11,6 +11,7 @@ public class MainActivity extends AppCompatActivity {
     boolean rp;
     boolean fps;
     boolean isLaunch;
+    String name;
 
 SharedPreferences mSettings;
     @Override
@@ -19,7 +20,8 @@ SharedPreferences mSettings;
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
         mSettings = getSharedPreferences("setting", Context.MODE_PRIVATE);
-        String name = getIntent().getStringExtra("Name");
+        name = getIntent().getStringExtra("Name");
+        if(name.equals("Player") && !mSettings.getString("Name", "Player").equals("Player"))name = mSettings.getString("Name", "Player");
         isLaunch = getIntent().getBooleanExtra("IsL",false);
         if(isLaunch) {
             rp = getIntent().getBooleanExtra("Replace", mSettings.getBoolean("Replace", false));
@@ -27,8 +29,9 @@ SharedPreferences mSettings;
         }
         else {
             rp = mSettings.getBoolean("Replace", false);
-            mSettings.getBoolean("Replace", false);
             fps =  mSettings.getBoolean("FPS", false);
+
+
         }
         game = new Game(this,name,rp,fps);
         setContentView(game);
@@ -47,6 +50,7 @@ SharedPreferences mSettings;
         SharedPreferences.Editor editor = mSettings.edit();
         editor.putBoolean("FPS", fps);
         editor.putBoolean("Replace", rp);
+        editor.putString("Name", name);
         editor.apply();
     }
 

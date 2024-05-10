@@ -82,7 +82,8 @@ public class Points extends Circle{
             // рисуем еду
             paint.setColor(Food_Color[i]);
             if (player.Can_SEE_FOOD(FoodX[i], FoodY[i],displayMetrics.widthPixels,displayMetrics.heightPixels)){
-                canvas.drawCircle((float) camera.gameTOdisplaycoordinateX(FoodX[i]), (float) camera.gameTOdisplaycoordinateY(FoodY[i]), getRadiusFood(), paint);}
+                canvas.drawCircle((float) camera.gameTOdisplaycoordinateX(FoodX[i]), (float) camera.gameTOdisplaycoordinateY(FoodY[i]), getRadiusFood(), paint);
+            }
         }
     }
 
