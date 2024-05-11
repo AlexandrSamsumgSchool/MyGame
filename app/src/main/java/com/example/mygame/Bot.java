@@ -6,7 +6,7 @@ import android.graphics.Paint;
 public class Bot extends Circle{
     private int dX,dY;//направление рандомное
     private int tick = 0;
-    public static  double MAX_SPEED = 10;
+    public static  double MAX_SPEED = 7;
     public int EatenFood = 0;
     public static final int Bots = 25;
     public Bot(int color, double positionX, double positionY, double radius) {
@@ -40,7 +40,6 @@ public class Bot extends Circle{
         positionY += velocityY;
         tick++;
         Collision();
-        MAX_SPEED = 120 / (Math.sqrt(radius));
         if (EatenFood > 75 && radius > 100) {
             radius = radius - 0.0625;
             EatenFood -= 0.0225;

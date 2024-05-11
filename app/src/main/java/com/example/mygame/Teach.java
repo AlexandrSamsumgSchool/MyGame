@@ -9,7 +9,7 @@ import android.view.View;
 
 public class Teach extends AppCompatActivity {
 ImageFilterButton teach ;
-private final int[] images = {R.drawable.menuteach, R.drawable.joystickteach,R.drawable.growteach,R.drawable.enemyteach,R.drawable.menuteach};
+private final int[] images = {R.drawable.menu, R.drawable.joystick,R.drawable.grow,R.drawable.enemy,R.drawable.menu};
 private int imageNum = 0 ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

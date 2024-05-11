@@ -7,13 +7,6 @@ public class GameLoop extends Thread{
     private final SurfaceHolder surfaceHolder;
     private final Game game;
     private double averageFPS;
-
-
-
-    public void setRunning(boolean running) {
-        isRunning = running;
-    }
-
     private long startTime;
     public GameLoop(Game game, SurfaceHolder surfaceHolder) {
         this.surfaceHolder = surfaceHolder;
@@ -32,7 +25,7 @@ public class GameLoop extends Thread{
     public void run() {
         Canvas canvas = null;
         super.run();
-        int frameCount =0;
+        int frameCount = 0;
         long elapsedTime;
         startTime = System.currentTimeMillis();
         while(isRunning){
@@ -58,7 +51,7 @@ public class GameLoop extends Thread{
                     }
                 }
                 }
-            elapsedTime = System.currentTimeMillis()- startTime;
+            elapsedTime = System.currentTimeMillis() - startTime;
             if(elapsedTime>=1000){
                     averageFPS =frameCount/(0.001 * elapsedTime);
                     frameCount = 0;
