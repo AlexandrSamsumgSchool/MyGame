@@ -32,7 +32,6 @@ public class Joystick {
         innerCirclePaint =new Paint();
         innerCirclePaint.setColor(innerCircleColor);
         innerCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
-
     }
 
     public void draw(Canvas canvas) {
