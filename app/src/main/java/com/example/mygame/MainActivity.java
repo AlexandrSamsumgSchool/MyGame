@@ -12,8 +12,7 @@ public class MainActivity extends AppCompatActivity {
     boolean fps;
     boolean isLaunch;
     String name;
-
-SharedPreferences mSettings;
+    SharedPreferences mSettings;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,12 +29,9 @@ SharedPreferences mSettings;
         else {
             rp = mSettings.getBoolean("Replace", false);
             fps =  mSettings.getBoolean("FPS", false);
-
-
         }
         game = new Game(this,name,rp,fps);
         setContentView(game);
-
     }
 
     @Override 
@@ -46,7 +42,6 @@ SharedPreferences mSettings;
     @Override
     protected void onResume() {
         super.onResume();
-        //
         SharedPreferences.Editor editor = mSettings.edit();
         editor.putBoolean("FPS", fps);
         editor.putBoolean("Replace", rp);

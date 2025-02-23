@@ -21,5 +21,4 @@ public abstract class GameObject {
 
     public abstract void draw(Canvas canvas, CamerA camera);
     public abstract void update();
-
 }

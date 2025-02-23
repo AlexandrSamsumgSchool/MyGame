@@ -12,26 +12,30 @@ import android.graphics.Paint;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import androidx.annotation.NonNull;
+
+import java.net.Socket;
+import java.util.HashMap;
+
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
-    private final Player player;
+    private static  Player player = null;
     private final MediaPlayer mediaPlayer1,mediaPlayer2 ;
     private final Points points;
     private final Map map;
     private final Bot[] bots;
-    private final DisplayMetrics displayMetrics;
+    public static HashMap<String,Bot> Players = new HashMap<>();
+    public static  DisplayMetrics displayMetrics;
     private final Joystick joystick;
     private  GameLoop gameLoop;
     private final CamerA camera ;
-
     String name;
     private int Textsize = 60,textX = 14,textY = 5;
     boolean fps  ;
-    //сделать нормальное расположение имени
-
+    public static Client client ;
     public Game(Context context,String name,boolean rp,boolean fps) {
             super(context);
         SurfaceHolder surfaceHolder = getHolder();
@@ -49,31 +53,57 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         this.fps = fps;
         if(rp)joystick = new Joystick(displayMetrics.widthPixels-300,displayMetrics.heightPixels-300/*800*/,displayMetrics.heightPixels/5,displayMetrics.heightPixels/12,innerCircleColor,outerCircleColor);
         else joystick = new Joystick(275,displayMetrics.heightPixels-300/*800*/,displayMetrics.heightPixels/5,displayMetrics.heightPixels/12,innerCircleColor,outerCircleColor);
-
-        // создаем игрока и камеру
-        player = new Player(getContext(),joystick,Math.random()*8000,Math.random()*8000,150);
-        camera = new CamerA(displayMetrics.widthPixels,displayMetrics.heightPixels,player);
         // создаем еду и способности
         points = new Points();
-        points.SpawnPointsX();
-        points.SpawnPointsY();
+        // создаем игрока и камеру
+        player = new Player(getContext(),joystick,Math.random()*5000 + 1000,Math.random()*5000 + 1000,150,name);
+        player.color = player.getColor();
+        camera = new CamerA(displayMetrics.widthPixels,displayMetrics.heightPixels,player);
+
         // карта
         map = new Map(camera,player,displayMetrics.widthPixels,displayMetrics.heightPixels);
         // создаем ботов
         Bot bot = new Bot();
         bots = new Bot[Bot.Bots];
         for(int i=0;i<Bot.Bots;i++) {
-            bots[i] = new Bot(player.getColor(), bot.SpawnBotX(), bot.SpawnBotY(), Math.random()*200+100);
-            if(bots[i].Can_EAT_PL((int) player.positionX, (int) player.positionY, (int) player.radius)){
-                bots[i].positionX = bot.SpawnBotX();
-                bots[i].positionY = bot.SpawnBotY();
+            float bX = Bot.SpawnBotX(), bY = Bot.SpawnBotY(),bR = (float) (Math.random()*200+100);
+            Bot tmp = new Bot(player.getColor(),bX,bY,bR,null);
+            if(tmp.Can_EAT_PL((int) player.positionX, (int) player.positionY, (int) player.radius)){
+                bX = bot.SpawnBotX();
+                bY = bot.SpawnBotY();
             }
+            tmp.positionX = bX;
+            tmp.positionY = bY;
+            bots[i] = tmp;
+
         }
         // обработка звуков
         mediaPlayer1 = MediaPlayer.create(this.getContext(),R.raw.eat_dot);
         mediaPlayer2 = MediaPlayer.create(this.getContext(),R.raw.eat_blob);
+        client = new Client();
+        client.execute();
     }
-// узнаем где произошло нажатие и рассчитываем скорость джойстика
+    public static DisplayMetrics getDisplayMetrics(){
+        return displayMetrics;
+    }
+    public static Player getPlayer(){
+        return player;
+    }
+    public static void setPlayers(String socket, Bot pl) {
+        if (socket != null && pl != null) {
+            Players.put(socket, pl); // Добавляем или обновляем игрока
+        }
+    }
+    public static boolean findPl(String id){
+        return Players.containsValue(id);
+    }
+
+    public static void updatePlayer(String socketId, double positionX, double positionY) {
+        Players.get(socketId).positionX = positionX;
+        Players.get(socketId).positionY = positionY;
+    }
+
+    // узнаем где произошло нажатие и рассчитываем скорость игрока
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -123,66 +153,92 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     @Override
-    public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
-
-    }
+    public void surfaceDestroyed(@NonNull SurfaceHolder holder) {}
 // рисуем все что обновили
     @Override
     public void draw(Canvas canvas) {
          super.draw(canvas);
          canvas.drawColor(Color.WHITE);
          map.drawMap(canvas);
-         points.Draw(canvas,camera,bots,mediaPlayer1,mediaPlayer2,displayMetrics,player);
+         points.Draw(canvas,camera,bots,mediaPlayer1,mediaPlayer2,displayMetrics,player);// самый важный костыль кода)
          for(Bot k:bots){
-                     k.draw(canvas,camera,player,displayMetrics.widthPixels,displayMetrics.heightPixels);
+             k.draw(canvas,camera,player,displayMetrics.widthPixels,displayMetrics.heightPixels);
          }
         player.draw(canvas,camera);
         drawName(canvas);
         drawFPS_SIZE(canvas);
         joystick.draw(canvas);
-       if(player.isEaten){
-           Draw_Game_Over(canvas);
-       }
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        if (!Players.isEmpty()) {
+               for (HashMap.Entry<String, Bot> entry : Players.entrySet()) {
+                   Bot players = entry.getValue();  // сам обьект - игрок
+                    if(!players.name.equals(name) && player.Can_SEE_FOOD((float)players.positionX,(float)players.positionY,displayMetrics.widthPixels,displayMetrics.heightPixels)){
+                        players.draw(canvas,camera,player,displayMetrics.widthPixels,displayMetrics.heightPixels);
+                    }
+               }
+           }
+        if(player.isEaten){
+            Draw_Game_Over(canvas);
+        }
     }
 
 //рисуем  ФПС и размер еды
     public void drawFPS_SIZE (Canvas canvas){
         String averageFPS = Integer.toString((int)gameLoop.getAverageFPS());
-                    Paint paint = new Paint();
-                    paint.setColor(Color.RED);
-                    paint.setTextSize(50);
-                    if(fps)canvas.drawText("FPS  "+averageFPS,100,200,paint);
-                    canvas.drawText("Size = " + (int) player.EatenFood, 100, 100, paint);
+        Paint paint = new Paint();
+        paint.setColor(Color.RED);
+        paint.setTextSize(50);
+        if(fps)canvas.drawText("FPS  "+averageFPS,100,200,paint);
+        canvas.drawText("Size = " + (int) player.EatenFood, 100, 100, paint);
     }
-    public void drawName(Canvas canvas){
+    public void drawName(Canvas canvas) {
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setTextSize(Textsize);
-        canvas.drawText(name, displayMetrics.widthPixels/2-textX*name.length(), displayMetrics.heightPixels/2+textY, paint);
+
+        float textWidth = paint.measureText(name);
+
+        float x = displayMetrics.widthPixels / 2 - textWidth / 2; // Центрируем по X
+        float y = displayMetrics.heightPixels / 2 + textY; // Центрируем по Y
+
+        canvas.drawText(name, x, y, paint);
     }
+
     //обновляем игроком карту и расположение камеры
     public void update() {
-        if(player.isEaten) {
-            Textsize=0;
+        if (player.isEaten) {
+            Textsize = 0;
             return;
         }
-    camera.update();
-    joystick.update();
-        for(Bot k:bots){
+        camera.update();
+        joystick.update();
+        for (Bot k : bots) {
             k.update();
         }
-    player.update();
+
+        // Обновляем данные игрока
+        player.update();
+        client.sendPlayerData(Game.getPlayer());
         // Масштаб
-        if(player.CalculateScale(displayMetrics.widthPixels,displayMetrics.heightPixels) && map.Cagesize > 50)
-        {   Textsize*=1.05;textX*=1.072222222111;textY*= 1.06;
-            player.radius = player.radius/1.1;points.radiusFood/=1.1;map.Cagesize/=1.07;player.MAX_SPEED/=1.09;
-            for(Bot k:bots){
-                k.radius/=1.25;
+        if (player.CalculateScale(displayMetrics.widthPixels, displayMetrics.heightPixels) && map.Cagesize > 100) {
+            player.Scale++;
+            Textsize *= 1.03;
+            textX *= 1.072222222111;
+            textY *= 1.06;
+            player.radius /= 1.05;
+            points.radiusFood /= 1.05;
+            map.Cagesize /= 1.1;
+            player.MAX_SPEED /= 1.09;
+            for (Bot k : bots) {
+                k.radius /= 1.05;
             }
         }
         map.update();
     }
+
     public void Draw_Game_Over(Canvas canvas){
+
         String text = "Game Over";
         String text1 = "Size = "+ (int)player.EatenFood;
         String text2 = "Radius = "+(int)player.radius;

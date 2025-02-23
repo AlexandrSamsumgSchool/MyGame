@@ -20,7 +20,6 @@ public class CamerA {
         gameCenterY = centerObject.getPositionY();
         gameX = displayCenterX - gameCenterX;
         gameY = displayCenterY - gameCenterY;
-
     }
     public double gameTOdisplaycoordinateY(double y) {
         return y + gameY;
