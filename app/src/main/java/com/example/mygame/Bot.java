@@ -12,7 +12,7 @@ public class Bot extends Circle{
     private int tick = 0;
     public static  double MAX_SPEED = 7;
     public int EatenFood = 0;
-    public static final int Bots = 20;
+    public static final int Bots = 0;
     private int Textsize = 60,textX = 14,textY = 5;
     public static final int MAX_TEXT_SIZE = 100; // Максимальный размер текста
     public static final int MIN_TEXT_SIZE = 5; // Минимальный размер текста

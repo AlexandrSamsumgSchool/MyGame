@@ -93,11 +93,14 @@ public class Points extends Circle {
                     player.isEaten = true;
                     player.radius = 0;
                     Game.client.sendPlayerData(player);
+
                 }
                 else if (!from_server.name.equals(player.name) && player.Can_EAT_PL(from_server.positionX, from_server.positionY, from_server.radius)) {
                     mediaPlayer1.start();
-                    player.radius += Math.sqrt(player.radius + from_server.radius * from_server.radius);
+                    player.radius += Math.sqrt(player.radius + from_server.radius * from_server.radius)/2;
                     player.EatenFood += from_server.EatenFood;
+                    from_server.radius = 0;
+                    from_server.positionX = -1;
                 }
             }
         }

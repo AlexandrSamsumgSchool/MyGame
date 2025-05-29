@@ -29,10 +29,8 @@ public class GameLoop extends Thread{
         long elapsedTime;
         startTime = System.currentTimeMillis();
         while(isRunning){
-
             try {
                 canvas = surfaceHolder.lockCanvas();
-
                 synchronized (surfaceHolder) {
                     game.update();
                     game.draw(canvas);
